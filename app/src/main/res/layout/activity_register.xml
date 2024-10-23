@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_register"
+    tools:context=".view.account.register.RegisterActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="33dp"
+        android:paddingRight="34dp"
+        android:layout_marginTop="30dp"
+        android:gravity="start">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:src="@drawable/logo"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Register"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Begin Your Journey!"
+            android:textSize="15dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/fullnameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Fullname"
+                android:fontFamily="@font/poppins_medium"/>
+            <EditText
+                android:id="@+id/fullnameTextEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fullname"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border"
+                android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/noPhoneLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="No Phone"
+                android:fontFamily="@font/poppins_medium"/>
+            <EditText
+                android:id="@+id/noPhoneTextEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No Phone"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border"
+                android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/usernameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Username"
+                android:fontFamily="@font/poppins_medium"/>
+            <EditText
+                android:id="@+id/usernameTextEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:padding="12dp"
+                android:background="@drawable/edittext_border"
+                android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/passwordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Password"
+
+                android:fontFamily="@font/poppins_medium"/>
+            <EditText
+                android:id="@+id/passwordTextEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:padding="12dp"
+                android:inputType="textPassword"
+                android:background="@drawable/edittext_border"
+                android:drawableEnd="@drawable/ic_visibility_off"
+                android:layout_marginBottom="16dp"
+                />
+
+            <TextView
+                android:id="@+id/confirmPasswordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Confirm Password"
+                android:fontFamily="@font/poppins_medium"/>
+            <EditText
+                android:id="@+id/confirmPasswordTextEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm Password"
+                android:padding="12dp"
+                android:inputType="textPassword"
+                android:background="@drawable/edittext_border"
+
+                android:drawableEnd="@drawable/ic_visibility_off"
+                />
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:backgroundTint="#4A6572"
+                android:textColor="#ffffff"
+                android:padding="12dp"
+                android:layout_marginTop="24dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Already have an account? "
+                    android:textColor="#808080"
+                    android:textSize="14sp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center" />
+                <TextView
+                    android:id="@+id/signinlink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:text="Sign In"
+                    android:textColor="@color/primary"
+                    android:textSize="14sp"
+                    android:layout_marginTop="6dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

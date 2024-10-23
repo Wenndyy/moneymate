@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.splash.Splash2Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="446dp"
+            android:layout_height="332dp"
+            android:src="@drawable/splash_money"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Budget Better, Live Better"
+            android:fontFamily="@font/poppins_semibold"
+            android:textSize="26dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="40dp"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:text="Manage your money with MoneyMate and get better live"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="18dp"
+            android:textAlignment="center"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            android:layout_width="232dp"
+            android:layout_height="55dp"
+            android:text="Let's Get Started"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="20dp"
+            android:insetTop="0dp"
+            android:textSize="22dp"
+            android:fontFamily="@font/poppins_medium"
+            android:insetBottom="0dp"
+            app:backgroundTint="@null"
+            android:backgroundTint="@null"
+            android:background="@drawable/button_gradient"
+            app:rippleColor="#33FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
