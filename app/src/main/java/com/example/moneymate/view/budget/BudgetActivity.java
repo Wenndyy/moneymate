@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.moneymate.R;
-//import com.example.moneymate.view.goals.SetGoalsActivity;
+import com.example.moneymate.view.goals.SetGoalsActivity;
 
 public class BudgetActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -32,9 +32,9 @@ public class BudgetActivity extends AppCompatActivity {
 
         btnCancel = findViewById(R.id.cancelButton);
         btnCancel.setOnClickListener(v -> {
-            //Intent intent = new Intent(BudgetActivity.this, SetGoalsActivity.class);
-            //startActivity(intent);
-            //finish();
+            Intent intent = new Intent(BudgetActivity.this, SetGoalsActivity.class);
+            startActivity(intent);
+            finish();
         });
         categoryTitleText = findViewById(R.id.category_title);
         categoryIcon = findViewById(R.id.img_category);

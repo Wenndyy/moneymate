@@ -13,30 +13,16 @@
         android:theme="@style/Theme.Moneymate"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".view.splash.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.dashboard.DashboardActivity"
+            android:name=".view.goals.UpdateGoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.account.register.RegisterActivity"
+            android:name=".view.goals.GoalsDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.splash.Splash2Activity"
+            android:name=".view.goals.CategoryGoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.account.login.LoginActivity"
+            android:name=".view.goals.SetGoalsActivity"
             android:exported="false" />
         <activity
             android:name=".view.budget.CategoryBudgetActivity"
@@ -51,9 +37,56 @@
             android:name=".view.budget.SetBudgetActivity"
             android:exported="false" />
         <activity
+            android:name=".view.expense.UpdateExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.expense.RecordExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.income.UpdateIncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.income.RecordIncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.expense.CategoryExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.income.CategoryIncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.goals.GoalsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.budget.BudgetActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.expense.ExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.income.IncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.dashboard.DashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.account.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.splash.Splash2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".view.account.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.splash.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

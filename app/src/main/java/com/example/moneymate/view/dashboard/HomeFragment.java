@@ -2,23 +2,24 @@ package com.example.moneymate.view.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import com.example.moneymate.R;
 import com.example.moneymate.view.budget.SetBudgetActivity;
-/*
 import com.example.moneymate.view.expense.CategoryExpenseActivity;
 import com.example.moneymate.view.expense.RecordExpenseActivity;
+import com.example.moneymate.view.goals.GoalsActivity;
 import com.example.moneymate.view.goals.SetGoalsActivity;
 import com.example.moneymate.view.income.CategoryIncomeActivity;
-import com.example.moneymate.view.income.RecordIncomeActivity;*/
+import com.example.moneymate.view.income.RecordIncomeActivity;
 
 
 public class HomeFragment extends Fragment {
@@ -48,12 +49,8 @@ public class HomeFragment extends Fragment {
         showMoreExpense= view.findViewById(R.id.show_more_expense);
 
 
-        budget.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SetBudgetActivity.class);
-            startActivity(intent);
 
-        });
-       /* income.setOnClickListener(v -> {
+        income.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CategoryIncomeActivity.class);
             startActivity(intent);
 
@@ -63,7 +60,11 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
 
         });
+        budget.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SetBudgetActivity.class);
+            startActivity(intent);
 
+        });
         goals.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetGoalsActivity.class);
             startActivity(intent);
@@ -76,6 +77,6 @@ public class HomeFragment extends Fragment {
         showMoreExpense.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), RecordExpenseActivity.class);
             startActivity(intent);
-        });*/
+        });
     }
 }
