@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="235dp"
+    android:layout_height="197dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog"
+    android:padding="16dp">
+
+    <!-- Close button at the top left -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <!-- Close Icon -->
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="start">
+            <ImageView
+                android:id="@+id/close_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_close" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <!-- Delete Icon -->
+            <ImageView
+                android:id="@+id/delete_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete" />
+            <!-- Edit Icon -->
+            <ImageView
+                android:id="@+id/edit_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_edit" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="19dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/bg_dialog_income_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            >
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:id="@+id/layout_category"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_category_icon"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/img_category"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_food"/>
+
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/category_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/amount_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-Rp50.000,00"
+            android:textSize="14sp"
+            android:textColor="@color/red"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginTop="8dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date:"
+                android:textSize="13sp"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppins_regular"
+                />
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10/21/2024"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

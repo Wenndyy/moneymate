@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recordExpenseScreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.expense.RecordExpenseActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="21dp"
+            android:paddingTop="24dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/appbar_gradient">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:weightSum="2"
+                android:layout_height="70dp">
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"/>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="24dp">
+                    <TextView
+                        android:id="@+id/toolbarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Income Records"
+                        android:textColor="@color/white"
+                        android:textSize="27sp"
+                        android:fontFamily="@font/poppins_semibold" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+        <!-- Card Layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_fitur"
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="5dp">
+
+            <!-- Date -->
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:background="@drawable/bg_header_card"
+                android:paddingHorizontal="21dp">
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mon, 10/21"
+                    android:fontFamily="@font/poppins_light"
+                    android:textSize="13dp"
+                    android:textColor="#7A000000"
+                    android:gravity="center"
+
+                    />
+            </LinearLayout>
+
+
+            <!-- Wage Row -->
+            <LinearLayout
+                android:id="@+id/itemIncome"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_food" />
+                </LinearLayout>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp50.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_lifestyle"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lifestyle"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp350.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_beauty"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Beauty"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp500.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_groceries"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Groceries"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp400.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_fitur"
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="5dp">
+
+            <!-- Date -->
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:background="@drawable/bg_header_card"
+                android:paddingHorizontal="21dp">
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mon, 10/21"
+                    android:fontFamily="@font/poppins_light"
+                    android:textSize="13dp"
+                    android:textColor="#7A000000"
+                    android:gravity="center"
+
+                    />
+            </LinearLayout>
+
+
+            <!-- Wage Row -->
+            <LinearLayout
+
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_food" />
+                </LinearLayout>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp50.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_lifestyle"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lifestyle"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp350.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_beauty"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Beauty"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp500.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FFBDBDBD" />
+            <LinearLayout
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="21dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_icon"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_groceries"
+                        />
+                </LinearLayout>
+
+
+                <!-- Text and Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Groceries"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Rp400.000,00"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/red"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
