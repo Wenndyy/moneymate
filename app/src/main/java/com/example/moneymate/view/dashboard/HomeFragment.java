@@ -12,7 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.moneymate.R;
-/*import com.example.moneymate.view.budget.SetBudgetActivity;
+import com.example.moneymate.view.budget.SetBudgetActivity;
+/*
 import com.example.moneymate.view.expense.CategoryExpenseActivity;
 import com.example.moneymate.view.expense.RecordExpenseActivity;
 import com.example.moneymate.view.goals.SetGoalsActivity;
@@ -47,7 +48,11 @@ public class HomeFragment extends Fragment {
         showMoreExpense= view.findViewById(R.id.show_more_expense);
 
 
+        budget.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SetBudgetActivity.class);
+            startActivity(intent);
 
+        });
        /* income.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CategoryIncomeActivity.class);
             startActivity(intent);
@@ -58,11 +63,7 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
 
         });
-        budget.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SetBudgetActivity.class);
-            startActivity(intent);
 
-        });
         goals.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetGoalsActivity.class);
             startActivity(intent);

@@ -38,6 +38,22 @@
         <activity
             android:name=".view.account.login.LoginActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.budget.CategoryBudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.budget.BudgetDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.budget.UpdateBudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.budget.SetBudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.budget.BudgetActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
