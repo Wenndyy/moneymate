@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "330111368412",
+    "firebase_url": "https://moneymate-c95da-default-rtdb.firebaseio.com",
+    "project_id": "moneymate-c95da",
+    "storage_bucket": "moneymate-c95da.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330111368412:android:8f6108ed03839cc183c819",
+        "android_client_info": {
+          "package_name": "com.example.moneymate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7QrNPyuE2dbiCSUchk0AszuWglv8Rs90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

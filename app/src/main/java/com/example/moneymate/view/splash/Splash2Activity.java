@@ -16,7 +16,7 @@ public class Splash2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash2);
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+        getSharedPreferences("MyPrefs", MODE_PRIVATE)
                 .edit()
                 .putBoolean("isFirstTime", false)
                 .apply();
