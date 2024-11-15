@@ -104,113 +104,12 @@
                     android:layout_height="wrap_content"
                     android:columnCount="3"
                     android:rowCount="2"
+                    android:paddingHorizontal="10dp"
                     android:layout_gravity="center"
-
                     android:alignmentMode="alignMargins"
                     android:columnOrderPreserved="false"
                     android:layout_marginTop="32dp"
-                    app:layout_constraintTop_toBottomOf="@id/titleText">
-                    <LinearLayout
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginBottom="17dp"
-                        android:layout_marginRight="17dp"
-                        android:id="@+id/wage_category"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/bg_category_icon"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_wage"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Wage"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/poppins_light"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginLeft="20dp"
-                        android:id="@+id/bonus_category"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/bg_category_icon"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_bonus"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bonus"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/poppins_light"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_gravity="end"
-                        android:id="@+id/investment_category"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/bg_category_icon"
-                        android:padding="5dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_investment"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Investment"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/poppins_light"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/parttime_category"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/bg_category_icon"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_parttime"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Parttime"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/poppins_light"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                </GridLayout>
+                    app:layout_constraintTop_toBottomOf="@id/titleText"/>
                 <com.google.android.material.button.MaterialButton
                     android:layout_gravity="center"
                     android:id="@+id/nextButton"

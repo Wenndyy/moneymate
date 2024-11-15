@@ -45,6 +45,6 @@ public abstract class User {
     public abstract void register(String email, String password);
     public abstract void logout();
 
-    public abstract void getUserData();
+
 
 }

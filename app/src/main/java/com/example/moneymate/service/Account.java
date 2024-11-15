@@ -45,6 +45,7 @@ public class Account extends User {
                    if (user != null){
                        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                       editor.putString("idUser", String.valueOf(user.getUid()));
                        editor.putBoolean("isLoggedIn", true);
                        editor.apply();
 
@@ -73,7 +74,6 @@ public class Account extends User {
                             if (firebaseUser != null) {
                                 String userId = firebaseUser.getUid();
 
-
                                 Map<String, Object> userData = new HashMap<>();
                                 userData.put("idUser", userId);
                                 userData.put("email", getEmail());
@@ -97,7 +97,6 @@ public class Account extends User {
                                         });
                             }
                         } else {
-
                             Toast.makeText(context, "Registrasi gagal!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -119,10 +118,7 @@ public class Account extends User {
 
     }
 
-    @Override
-    public void getUserData() {
 
-    }
 
 
 }

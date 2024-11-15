@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_category_icon"
+    android:padding="8dp"
+
+   >
+
+    <ImageView
+        android:id="@+id/categoryIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_default" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/categoryName"
+        android:layout_width="68dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="Category"
+        android:textSize="12sp" />
+</LinearLayout>

@@ -8,13 +8,14 @@
     tools:context=".view.dashboard.HomeFragment">
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         />
     <ScrollView
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/layoutHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

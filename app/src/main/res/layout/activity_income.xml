@@ -155,7 +155,9 @@
                     android:hint="Date"
                     android:padding="12dp"
                     android:background="@drawable/edittext_fitur_border"
-                    android:layout_marginBottom="26dp" />
+                    android:layout_marginBottom="26dp"
+                    android:focusable="false"
+                    android:clickable="true"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

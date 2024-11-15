@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moneymate.R;
 import com.example.moneymate.view.account.login.LoginActivity;
+import com.google.firebase.FirebaseApp;
 
 public class Splash2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_splash2);
         getSharedPreferences("MyPrefs", MODE_PRIVATE)
                 .edit()
