@@ -15,14 +15,14 @@
             android:id="@+id/categoryIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_wage"
+            android:src="@drawable/ic_default"
            />
     </LinearLayout>
     <TextView
         android:id="@+id/incomeType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wage"
+        android:text="Category"
         android:textSize="14sp"
         android:fontFamily="@font/poppins_medium"
         android:layout_weight="1"/>
@@ -30,7 +30,7 @@
         android:id="@+id/incomeAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+Rp3.350.000,00"
+        android:text="+Rp000,00"
         android:textSize="14sp"
         android:textColor="#FF21992F"
         android:fontFamily="@font/poppins_medium"/>

@@ -5,7 +5,8 @@
     android:id="@+id/splash2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.splash.Splash2Activity">
+    android:background="@color/white"
+    tools:context=".View.Splash.Splash2Activity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
             android:textSize="18dp"
             android:textAlignment="center"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginButton"
+            android:id="@+id/btnStarted"
             android:layout_width="232dp"
             android:layout_height="55dp"
             android:text="Let's Get Started"

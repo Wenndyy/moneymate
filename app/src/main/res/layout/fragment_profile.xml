@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.dashboard.ProfileFragment">
+    tools:context=".View.Dashboard.ProfileFragment">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -58,8 +59,10 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        app:layout_constraintTop_toBottomOf="@id/appbar"
+       android:orientation="vertical"
        android:padding="24dp">
        <LinearLayout
+           android:id="@+id/layoutProfile"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:layout_marginTop="32dp"
@@ -99,18 +102,18 @@
                android:background="@drawable/edittext_border"
                android:layout_marginBottom="16dp" />
            <TextView
-               android:id="@+id/usernameLabel"
+               android:id="@+id/emailLabel"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:textSize="16dp"
                android:textColor="@color/black"
-               android:text="Username"
+               android:text="Email"
                android:fontFamily="@font/poppins_medium"/>
            <EditText
-               android:id="@+id/usernameTextEdit"
+               android:id="@+id/emailTextEdit"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:hint="Hal0users1234"
+               android:hint="user@gmail.com"
                android:enabled="false"
                android:padding="12dp"
                android:background="@drawable/edittext_border"
@@ -132,6 +135,22 @@
                android:layout_marginTop="24dp"/>
 
 
+
+       </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:id="@+id/layoutProgress"
+           android:orientation="vertical"
+           android:visibility="gone"
+           android:gravity="center">
+           <ProgressBar
+               android:id="@+id/progressBar"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+
+               android:layout_centerInParent="true"
+               android:indeterminate="true"/>
 
        </LinearLayout>
    </LinearLayout>

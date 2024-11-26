@@ -8,84 +8,84 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher_primary"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launcher_primary"
         android:supportsRtl="true"
         android:theme="@style/Theme.Moneymate"
         tools:targetApi="31">
         <activity
-            android:name=".view.goals.UpdateGoalsActivity"
+            android:name=".View.Goals.UpdateGoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.goals.GoalsDetailActivity"
+            android:name=".View.Goals.GoalsDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.goals.CategoryGoalsActivity"
+            android:name=".View.Goals.CategoryGoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.goals.SetGoalsActivity"
+            android:name=".View.Goals.SetGoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.budget.CategoryBudgetActivity"
+            android:name=".View.Budget.CategoryBudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".view.budget.BudgetDetailActivity"
+            android:name=".View.Budget.BudgetDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.budget.UpdateBudgetActivity"
+            android:name=".View.Budget.UpdateBudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".view.budget.SetBudgetActivity"
+            android:name=".View.Budget.SetBudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".view.expense.UpdateExpenseActivity"
+            android:name=".View.Expense.UpdateExpenseActivity"
             android:exported="false" />
         <activity
-            android:name=".view.expense.RecordExpenseActivity"
+            android:name=".View.Expense.RecordExpenseActivity"
             android:exported="false" />
         <activity
-            android:name=".view.income.UpdateIncomeActivity"
+            android:name=".View.Income.UpdateIncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".view.income.RecordIncomeActivity"
+            android:name=".View.Income.RecordIncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".view.expense.CategoryExpenseActivity"
+            android:name=".View.Expense.CategoryExpenseActivity"
             android:exported="false" />
         <activity
-            android:name=".view.income.CategoryIncomeActivity"
+            android:name=".View.Income.CategoryIncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".view.goals.GoalsActivity"
+            android:name=".View.Goals.GoalsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.budget.BudgetActivity"
+            android:name=".View.Budget.BudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".view.expense.ExpenseActivity"
+            android:name=".View.Expense.ExpenseActivity"
             android:exported="false" />
         <activity
-            android:name=".view.income.IncomeActivity"
+            android:name=".View.Income.IncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".view.dashboard.DashboardActivity"
+            android:name=".View.Dashboard.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".view.account.register.RegisterActivity"
+            android:name=".View.Account.Register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".view.splash.Splash2Activity"
+            android:name=".View.Splash.Splash2Activity"
             android:exported="false" />
         <activity
-            android:name=".view.account.login.LoginActivity"
+            android:name=".View.Account.Login.LoginActivity"
             android:exported="false" />
+
         <activity
-            android:name=".view.splash.SplashActivity"
+            android:name=".View.Splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

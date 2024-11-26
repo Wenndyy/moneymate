@@ -8,4 +8,5 @@
     <color name="grey">#FFABABAB</color>
     <color name="tertiary">#FFE39797</color>
     <color name="red">#FFE64245</color>
+    <color name="bg">#FFF7F8FA</color>
 </resources>

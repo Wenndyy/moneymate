@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_fitur"
-    tools:context=".view.income.CategoryIncomeActivity">
+    tools:context=".View.Income.CategoryIncomeActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,8 +73,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="63dp"
         android:paddingHorizontal="24dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/appbar">
         <androidx.cardview.widget.CardView
+            android:id="@+id/layoutCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="18dp"
@@ -134,5 +136,20 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:id="@+id/layoutProgress"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"/>
+
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

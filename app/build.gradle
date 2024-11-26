@@ -1,7 +1,5 @@
 plugins {
-    //alias(libs.plugins.android.application)
-    id 'com.android.application'
-
+    alias(libs.plugins.android.application)
     id 'com.google.gms.google-services'
 }
 
@@ -48,11 +46,10 @@ dependencies {
     implementation libs.firebase.auth
     implementation libs.firebase.analytics
     implementation libs.firebase.firestore
-    implementation libs.firebase.storage
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-
+    implementation libs.firebase.bom
     implementation 'androidx.core:core:1.15.0'
-    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    implementation 'com.github.Spikeysanju:MotionToast:1.4'
 }
