@@ -134,7 +134,6 @@
                     android:hint="000,00"
                     android:padding="12dp"
                     android:clickable="true"
-
                     android:inputType="numberDecimal"
                     android:background="@drawable/edittext_fitur_border"
                     android:layout_marginBottom="10dp" />

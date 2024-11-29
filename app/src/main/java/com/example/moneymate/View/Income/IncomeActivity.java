@@ -33,7 +33,7 @@ import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
 
 public class IncomeActivity extends AppCompatActivity implements IncomeListener {
-    private FirebaseFirestore db;
+
     private String categoryId;
     private FirebaseAuth mAuth;
     private String userId;
@@ -60,7 +60,6 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
         categoryTitleText = findViewById(R.id.category_title);
@@ -112,7 +111,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        selectedDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                        selectedDate = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
                         dateTextEdit.setText(selectedDate);
                     }
                 },
@@ -136,7 +135,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
         Date updatedAt = new Date();
 
 
-        String[] dateParts = selectedDate.split("-");
+        String[] dateParts = selectedDate.split("/");
         int year = Integer.parseInt(dateParts[0]);
         int month = Integer.parseInt(dateParts[1]) - 1;
         int day = Integer.parseInt(dateParts[2]);

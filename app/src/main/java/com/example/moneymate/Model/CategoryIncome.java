@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CategoryIncome {
     private String idCategoryIncome;
-    private String IncomeCategoryName;
+    private String incomeCategoryName;
     private String categoryIncomeImage;
     private Date created_at;
     private Date updated_at;
@@ -14,7 +14,7 @@ public class CategoryIncome {
 
     public CategoryIncome(String idCategoryIncome, String incomeCategoryName, String categoryIncomeImage, Date created_at, Date updated_at) {
         this.idCategoryIncome = idCategoryIncome;
-        this.IncomeCategoryName = incomeCategoryName;
+        this.incomeCategoryName = incomeCategoryName;
         this.categoryIncomeImage = categoryIncomeImage;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -30,11 +30,11 @@ public class CategoryIncome {
     }
 
     public String getIncomeCategoryName() {
-        return IncomeCategoryName;
+        return incomeCategoryName;
     }
 
     public void setIncomeCategoryName(String incomeCategoryName) {
-        this.IncomeCategoryName = incomeCategoryName;
+        this.incomeCategoryName = incomeCategoryName;
     }
 
     public String getCategoryIncomeImage() {

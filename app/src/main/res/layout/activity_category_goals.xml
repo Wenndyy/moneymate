@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_fitur_second"
-    tools:context=".view.goals.CategoryGoalsActivity">
+    tools:context=".View.Goals.CategoryGoalsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

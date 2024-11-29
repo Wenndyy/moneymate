@@ -37,8 +37,6 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
     private MaterialButton nextButton;
     private String incomeCategory = "";
 
-    private static final String TAG = "CategoryIncomeActivity";
-    private FirebaseFirestore db;
     private List<CategoryIncome> categoryIncomeList;
     private GridLayout categoryGrid;
     private CategoryIncomeController categoryIncomeController;
@@ -83,7 +81,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
         });
 
 
-        db = FirebaseFirestore.getInstance();
+
         categoryIncomeList = new ArrayList<>();
         categoryGrid = findViewById(R.id.categoryGrid);
 
@@ -116,8 +114,6 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
 
     private void displayCategories() {
         categoryGrid.removeAllViews();
-
-
         for (CategoryIncome category : categoryIncomeList) {
             View categoryView = LayoutInflater.from(this).inflate(R.layout.item_category, null);
             ImageView categoryIcon = categoryView.findViewById(R.id.categoryIcon);

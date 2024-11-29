@@ -44,7 +44,6 @@ public class UpdateIncomeActivity extends AppCompatActivity implements IncomeLis
     private EditText dateTextEdit;
     private TextView categoryTitle;
 
-    private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String incomeId,incomeCategoryId;
     private String incomeDateString;
@@ -64,7 +63,7 @@ public class UpdateIncomeActivity extends AppCompatActivity implements IncomeLis
             finish();
         });
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+
 
         amountTextEdit = findViewById(R.id.amountTextEdit);
         dateTextEdit = findViewById(R.id.DateTextEdit);
@@ -158,7 +157,7 @@ public class UpdateIncomeActivity extends AppCompatActivity implements IncomeLis
         showMotionToast("Update Income",message, MotionToastStyle.SUCCESS);
         amountTextEdit.setText("");
         dateTextEdit.setText("");
-        Intent intent = new Intent(UpdateIncomeActivity.this, DashboardActivity.class);
+        Intent intent = new Intent(UpdateIncomeActivity.this, RecordIncomeActivity.class);
         startActivity(intent);
         finish();
     }

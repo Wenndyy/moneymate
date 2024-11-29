@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="63dp"
         android:paddingHorizontal="24dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/appbar">
         <androidx.cardview.widget.CardView
             android:id="@+id/layoutIncome"

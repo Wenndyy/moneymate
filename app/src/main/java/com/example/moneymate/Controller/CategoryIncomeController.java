@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CategoryIncomeController extends CategoryIncome {
-    private FirebaseAuth mAuth;
+
     private FirebaseFirestore db;
     private CategoryIncomeListener categoryIncomeListener;
     private List<CategoryIncome> categoryIncomeList = new ArrayList<>();
@@ -24,8 +24,7 @@ public class CategoryIncomeController extends CategoryIncome {
 
     public CategoryIncomeController(String idCategoryIncome, String incomeCategoryName, String categoryIncomeImage, Date created_at, Date updated_at) {
         super(idCategoryIncome, incomeCategoryName, categoryIncomeImage, created_at, updated_at);
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        this.db = FirebaseFirestore.getInstance();
     }
 
     public void setCategoryIncomeListener(CategoryIncomeListener categoryIncomeListener) {

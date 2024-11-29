@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -23,10 +22,8 @@ import com.example.moneymate.Interface.IncomeListener;
 import com.example.moneymate.Model.CategoryIncome;
 import com.example.moneymate.R;
 import com.example.moneymate.Model.Income;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -46,8 +43,8 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
     private LinearLayout recordLayout;
 
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private String userId;
+
+
     private ProgressBar progressBar;
     private TextView noValue;
 
@@ -64,10 +61,10 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        mAuth = FirebaseAuth.getInstance();
+
         db = FirebaseFirestore.getInstance();
 
-        userId = mAuth.getCurrentUser().getUid();
+
         progressBar = findViewById(R.id.progressBar);
         backArrow = findViewById(R.id.backArrow);
         backArrow.setOnClickListener(v -> {
@@ -154,7 +151,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            String categoryName = document.getString("IncomeCategoryName");
+                            String categoryName = document.getString("incomeCategoryName");
                             String iconName = document.getString("categoryIncomeImage");
                             incomeType.setText(categoryName);
                             if (iconName != null && !iconName.isEmpty()) {
