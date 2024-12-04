@@ -15,13 +15,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.moneymate.Controller.CategoryExpenseController;
-import com.example.moneymate.Controller.CategoryIncomeController;
 import com.example.moneymate.Interface.CategoryExpenseListener;
 import com.example.moneymate.Model.CategoryExpense;
-import com.example.moneymate.Model.CategoryIncome;
 import com.example.moneymate.R;
-import com.example.moneymate.View.Income.CategoryIncomeActivity;
-import com.example.moneymate.View.Income.IncomeActivity;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -92,7 +88,7 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
         categoryExpenseController.setCategoryExpenseListener(CategoryExpenseActivity.this);
 
 
-        categoryExpenseController.getCategoryIncome();
+        categoryExpenseController.getCategoryExpense();
 
     }
 

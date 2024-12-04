@@ -25,7 +25,7 @@ public class CategoryExpenseController extends CategoryExpense{
         this.categoryExpenseListener = categoryExpenseListener;
     }
 
-    public void getCategoryIncome() {
+    public void getCategoryExpense() {
         categoryExpenseListener.onMessageLoading(true);
         db.collection("CategoryExpense")
                 .get()

@@ -2,23 +2,54 @@ package com.example.moneymate.View.Budget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.example.moneymate.Controller.BudgetController;
+import com.example.moneymate.Controller.ExpenseController;
+import com.example.moneymate.Interface.BudgetListener;
+import com.example.moneymate.Model.Budget;
+import com.example.moneymate.Model.CategoryBudget;
+import com.example.moneymate.Model.Expense;
 import com.example.moneymate.R;
+import com.example.moneymate.View.Dashboard.DashboardActivity;
+import com.example.moneymate.View.Expense.ExpenseActivity;
+import com.example.moneymate.View.Expense.RecordExpenseActivity;
 import com.example.moneymate.View.Goals.SetGoalsActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class BudgetActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
+
+public class BudgetActivity extends AppCompatActivity implements BudgetListener {
+    private String categoryId;
+    private FirebaseAuth mAuth;
+    private String userId;
     private Toolbar toolbar;
-    private ImageView categoryIcon;
+    private ImageView backArrow;
 
     private TextView categoryTitleText;
-    private LinearLayout submitButton,btnCancel;
-    private  String budgetCategory;
+    private ImageView categoryIcon;
+
+    private String selectedDate;
+    private EditText amountTextEdit;
+    private LinearLayout submitButton,cancelButton, layoutProgress;
+    private CardView layoutBudget;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,104 +60,143 @@ public class BudgetActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        mAuth = FirebaseAuth.getInstance();
+        userId = mAuth.getCurrentUser().getUid();
+        categoryTitleText = findViewById(R.id.category_title);
+        categoryIcon = findViewById(R.id.img_category);
+        categoryId = getIntent().getStringExtra("budgetCategory");
+        amountTextEdit = findViewById(R.id.amountTextEdit);
+        submitButton = findViewById(R.id.submitButton);
+        backArrow = findViewById(R.id.backArrow);
+        cancelButton = findViewById(R.id.cancelButton);
+        layoutBudget = findViewById(R.id.layoutBudget);
+        layoutProgress = findViewById(R.id.layoutProgress);
 
-        btnCancel = findViewById(R.id.cancelButton);
-        btnCancel.setOnClickListener(v -> {
-            Intent intent = new Intent(BudgetActivity.this, SetGoalsActivity.class);
+        backArrow = findViewById(R.id.backArrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        cancelButton.setOnClickListener(view -> {
+            Intent intent = new Intent(BudgetActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
         });
-        categoryTitleText = findViewById(R.id.category_title);
-        categoryIcon = findViewById(R.id.img_category);
-        budgetCategory = getIntent().getStringExtra("budgetCategory");
-        updateCategoryUI(budgetCategory);
 
-        submitButton = findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(v -> {
-            Intent intent = getIntent();
-            switch (budgetCategory) {
-                case "Food":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusFoodCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Groceries":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusGroceriesCategory", true);
-                    startActivity(intent);
-                    break;
+        if (categoryId != null) {
+            BudgetController budget = new BudgetController();
+            budget.setBudgetListener(this);
+            budget.getCategoryDataById(categoryId);
+        }
 
-                case "Lifestyle":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusLifestyleCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Beauty":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusBeautyCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Tax":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusTaxCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Education":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusEducationCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Residential":
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusResidentialCategory", true);
-                    startActivity(intent);
-                    break;
+        submitButton.setOnClickListener(view -> submitBudget());
 
-                default:
-                    intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-                    intent.putExtra("statusFoodCategory", true);
-                    startActivity(intent);
-                    break;
-            }
-        });
     }
 
-    private void updateCategoryUI(String category) {
-        switch (category) {
-            case "Food":
-                categoryTitleText.setText("Food");
-                categoryIcon.setImageResource(R.drawable.ic_food);
-                break;
-            case "Groceries":
-                categoryTitleText.setText("Groceries");
-                categoryIcon.setImageResource(R.drawable.ic_groceries);
-                break;
 
-            case "Lifestyle":
-                categoryTitleText.setText("Lifestyle");
-                categoryIcon.setImageResource(R.drawable.ic_lifestyle);
-                break;
-            case "Beauty":
-                categoryTitleText.setText("Beauty");
-                categoryIcon.setImageResource(R.drawable.ic_beauty);
-                break;
-            case "Tax":
-                categoryTitleText.setText("Tax");
-                categoryIcon.setImageResource(R.drawable.ic_tax);
-                break;
-            case "Education":
-                categoryTitleText.setText("Education");
-                categoryIcon.setImageResource(R.drawable.ic_education);
-                break;
-            case "Residential":
-                categoryTitleText.setText("Residential");
-                categoryIcon.setImageResource(R.drawable.ic_residential);
-                break;
+    private void submitBudget() {
+        String amountStr = amountTextEdit.getText().toString();
 
-            default:
-                categoryTitleText.setText("Food");
-                categoryIcon.setImageResource(R.drawable.ic_food);
-                break;
+        if (amountStr.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        double amount = Double.parseDouble(amountStr);
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+
+
+
+
+        BudgetController budgetController = new BudgetController();
+        budgetController.setBudgetListener(this);
+        Budget newBudget = new Budget(
+                null,
+                categoryId,
+                userId,
+                amount,
+                createdAt,
+                updatedAt,
+                new ArrayList<>()
+        );
+
+
+        budgetController.saveBudget(newBudget);
+    }
+    @Override
+    public void onGetExpenseSuccess(CategoryBudget category) {
+        if (category != null) {
+            categoryTitleText.setText(category.getExpenseCategoryName());
+            String imageName = category.getCategoryExpenseImage();
+            int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            if (imageResId != 0) {
+                categoryIcon.setImageResource(imageResId);
+            } else {
+                categoryIcon.setImageResource(R.drawable.ic_default);
+            }
+        }
+    }
+
+    @Override
+    public void onMessageSuccess(String message) {
+        showMotionToast("Budget",message, MotionToastStyle.SUCCESS);
+        amountTextEdit.setText("");
+
+        Intent intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onMessageFailure(String message) {
+        showMotionToast("Budget",message, MotionToastStyle.ERROR);
+    }
+
+    @Override
+    public void onMessageLoading(boolean isLoading) {
+        if (isLoading){
+            layoutProgress.setVisibility(View.VISIBLE);
+            layoutBudget.setVisibility(View.GONE);
+        }else{
+            layoutProgress.setVisibility(View.GONE);
+            layoutBudget.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onLoadDataExpenseSuccess(ArrayList<Budget> budgetList) {
+
+    }
+
+    @Override
+    public void onDataExpenseSuccess(Budget budget) {
+
+    }
+
+    @Override
+    public void onBudgetDataReady(List<Expense> expenses, double totalBudgetAmount, double totalItemAmount) {
+
+    }
+
+    @Override
+    public void onBudgetDetailsLoaded(List<Map<String, Object>> budgetDetails) {
+
+    }
+
+    private void showMotionToast(String title, String message, MotionToastStyle style) {
+        MotionToast.Companion.createColorToast(
+                this,
+                title,
+                message,
+                style,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.LONG_DURATION,
+                ResourcesCompat.getFont(this, R.font.poppins_regular)
+        );
     }
 }

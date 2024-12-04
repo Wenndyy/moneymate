@@ -51,7 +51,6 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_record_income);
 
         toolbar = findViewById(R.id.toolbar);
@@ -120,16 +119,13 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
 
                 dateLayout.addView(incomeView);
 
-
+                // Hanya tambahkan divider jika bukan item terakhir
                 if (i < incomeList.size() - 1) {
-                    View divider = new View(this);
-                    LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                    divider.setLayoutParams(dividerParams);
-                    divider.setBackgroundColor(ContextCompat.getColor(this, R.color.grey)); // or any color you prefer
-                    dateLayout.addView(divider);
+                    View view  = incomeView.findViewById(R.id.garis);
+                    view.setVisibility(View.VISIBLE);
                 }
             }
+
 
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(

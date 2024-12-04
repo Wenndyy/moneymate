@@ -17,8 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="21dp"
-            android:paddingTop="24dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/appbar_gradient">
@@ -52,8 +50,13 @@
                         android:textColor="@color/white"
                         android:textSize="27sp"
                         android:fontFamily="@font/poppins_semibold" />
+
+
                 </LinearLayout>
             </LinearLayout>
+
+
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

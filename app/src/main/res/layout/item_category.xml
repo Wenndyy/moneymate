@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/bg_category_icon"
-    android:padding="8dp"
-
+    android:padding="9dp"
    >
 
     <ImageView

@@ -2,30 +2,50 @@ package com.example.moneymate.View.Budget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.example.moneymate.Controller.CategoryBudgetController;
+import com.example.moneymate.Controller.CategoryExpenseController;
+import com.example.moneymate.Interface.CategoryBudgetListener;
+import com.example.moneymate.Model.CategoryBudget;
+import com.example.moneymate.Model.CategoryExpense;
 import com.example.moneymate.R;
+import com.example.moneymate.View.Expense.CategoryExpenseActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class CategoryBudgetActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
+
+public class CategoryBudgetActivity extends AppCompatActivity implements CategoryBudgetListener {
     private Toolbar toolbar;
     private ImageView backArrow;
     private MaterialButton nextButton;
     private String budgetCategory = "";
-    private boolean statusFoodCategory = false;
-    private boolean statusGroceriesCategory = false;
-    private boolean statusLifestyleCategory = false;
-    private boolean statusBeautyCategory = false;
-    private boolean statusTaxCategory = false;
-    private boolean statusEducationCategory = false;
-    private boolean statusResidentialCategory = false;
-    private LinearLayout foodCategory, groceriesCategory, lifestyleCategory, beautyCategory,taxCategory, educationCategory, residentialCategory;
+    private List<CategoryBudget> categoryBudgetList;
+    private GridLayout categoryGrid;
+    private CategoryBudgetController categoryBudgetController;
+    private CardView layoutCategory;
+    private LinearLayout  layoutProgress;
 
+    private List<String> usedCategoryIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +64,13 @@ public class CategoryBudgetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 budgetCategory = "";
-                resetCategories();
+
                 onBackPressed();
             }
         });
+
+        layoutCategory = findViewById(R.id.layoutCategory);
+        layoutProgress = findViewById(R.id.layoutProgress);
 
         nextButton = findViewById(R.id.nextButton);
         nextButton.setEnabled(false);
@@ -57,93 +80,70 @@ public class CategoryBudgetActivity extends AppCompatActivity {
                 if (!budgetCategory.isEmpty()) {
                     Intent intent = new Intent(CategoryBudgetActivity.this, BudgetActivity.class);
                     intent.putExtra("budgetCategory", budgetCategory);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    resetCategories();
                     startActivity(intent);
                 }
             }
         });
-        foodCategory = findViewById(R.id.food_category);
-        groceriesCategory = findViewById(R.id.groceries_category);
-        lifestyleCategory = findViewById(R.id.lifestyle_category);
-        beautyCategory = findViewById(R.id.beauty_category);
-        taxCategory = findViewById(R.id.tax_category);
-        educationCategory = findViewById(R.id.education_category);
-        residentialCategory = findViewById(R.id.residential_category);
+
+        categoryBudgetList = new ArrayList<>();
+        categoryGrid = findViewById(R.id.categoryGrid);
+
+        categoryBudgetController = new CategoryBudgetController();
+        categoryBudgetController.setCategoryBudgetListener(this);
 
 
-        foodCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(foodCategory, "Food");
-            }
-        });
-
-        groceriesCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(groceriesCategory, "Groceries");
-            }
-        });
-
-        lifestyleCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(lifestyleCategory,"Lifestyle");
-            }
-        });
-
-        beautyCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(beautyCategory,"Beauty");
-            }
-        });
-        taxCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(taxCategory,"Tax");
-            }
-        });
-        educationCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(educationCategory, "Education");
-            }
-        });
-        residentialCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(residentialCategory,"Residential");
-            }
-        });
-        statusFoodCategory = getIntent().getBooleanExtra("statusFoodCategory", false);
-        statusGroceriesCategory= getIntent().getBooleanExtra("statusGroceriesCategory", false);
-        statusLifestyleCategory = getIntent().getBooleanExtra("statusLifestyleCategory", false);
-        statusBeautyCategory = getIntent().getBooleanExtra("statusBeautyCategory", false);
-        statusTaxCategory = getIntent().getBooleanExtra("statusTaxCategory", false);
-        statusEducationCategory = getIntent().getBooleanExtra("statusEducationCategory", false);
-        statusResidentialCategory = getIntent().getBooleanExtra("statusResidentialCategory", false);
-
-
-        setupCategoryClickListener(foodCategory, "Food", statusFoodCategory);
-        setupCategoryClickListener(groceriesCategory, "Groceries", statusGroceriesCategory);
-        setupCategoryClickListener(lifestyleCategory, "Lifestyle", statusLifestyleCategory);
-        setupCategoryClickListener(beautyCategory, "Beauty", statusBeautyCategory);
-        setupCategoryClickListener(taxCategory, "Tax", statusTaxCategory);
-        setupCategoryClickListener(educationCategory, "Education", statusEducationCategory);
-        setupCategoryClickListener(residentialCategory, "Residential", statusResidentialCategory);
-
-
-        updateCategoryAppearance();
+        categoryBudgetController.getCategoryExpense();
 
     }
+    private void displayCategories(List<CategoryBudget> categoryList) {
+        categoryGrid.removeAllViews();
 
-    private void setupCategoryClickListener(LinearLayout categoryLayout, String category, boolean status) {
-        categoryLayout.setOnClickListener(v -> {
-            if (!status) {
-                selectCategory(categoryLayout, category);
+        for (CategoryBudget category : categoryList) {
+            View categoryView = LayoutInflater.from(this).inflate(R.layout.item_category, null);
+            ImageView categoryIcon = categoryView.findViewById(R.id.categoryIcon);
+            TextView categoryName = categoryView.findViewById(R.id.categoryName);
+
+            categoryName.setText(category.getExpenseCategoryName());
+            String imageName = category.getCategoryExpenseImage();
+            int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            if (imageResId != 0) {
+                categoryIcon.setImageResource(imageResId);
+            } else {
+                categoryIcon.setImageResource(R.drawable.ic_default);
             }
-        });
+
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(16, 16, 16, 16);
+            categoryView.setLayoutParams(params);
+
+
+            if (usedCategoryIds.contains(category.getIdCategoryExpense())) {
+
+                categoryView.setAlpha(0.5f);
+                categoryView.setEnabled(false);
+            } else {
+
+                categoryView.setBackgroundResource(R.drawable.bg_category_icon);
+                categoryView.setAlpha(1.0f);
+                categoryView.setEnabled(true);
+
+
+                categoryView.setOnClickListener(v -> {
+                    budgetCategory = category.getIdCategoryExpense();
+                    selectCategory((LinearLayout) categoryView, category.getIdCategoryExpense());
+                    nextButton.setEnabled(true);
+                });
+            }
+
+            categoryGrid.addView(categoryView);
+        }
     }
+
 
     private void selectCategory(LinearLayout selectedCategoryLayout, String category) {
         resetCategories();
@@ -152,33 +152,72 @@ public class CategoryBudgetActivity extends AppCompatActivity {
         nextButton.setEnabled(true);
     }
 
-    private void resetCategories() {
-        resetCategoryBackground(foodCategory, statusFoodCategory);
-        resetCategoryBackground(groceriesCategory, statusGroceriesCategory);
-        resetCategoryBackground(lifestyleCategory, statusLifestyleCategory);
-        resetCategoryBackground(beautyCategory, statusBeautyCategory);
-        resetCategoryBackground(taxCategory, statusTaxCategory);
-        resetCategoryBackground(educationCategory, statusEducationCategory);
-        resetCategoryBackground(residentialCategory, statusResidentialCategory);
-    }
 
-    private void resetCategoryBackground(LinearLayout category, boolean status) {
-        if (status) {
-            category.setBackgroundResource(R.drawable.bg_disabled_category_icon);
-            category.setAlpha(0.5f);
-        } else {
-            category.setBackgroundResource(R.drawable.bg_category_icon);
-            category.setAlpha(1.0f);
+    private void resetCategories() {
+        for (int i = 0; i < categoryGrid.getChildCount(); i++) {
+            View child = categoryGrid.getChildAt(i);
+            if (child instanceof LinearLayout) {
+                child.setBackgroundResource(R.drawable.bg_category_icon);
+            }
         }
     }
 
-    private void updateCategoryAppearance() {
-        resetCategoryBackground(foodCategory, statusFoodCategory);
-        resetCategoryBackground(groceriesCategory, statusGroceriesCategory);
-        resetCategoryBackground(lifestyleCategory, statusLifestyleCategory);
-        resetCategoryBackground(beautyCategory, statusBeautyCategory);
-        resetCategoryBackground(taxCategory, statusTaxCategory);
-        resetCategoryBackground(educationCategory, statusEducationCategory);
-        resetCategoryBackground(residentialCategory, statusResidentialCategory);
+    private void showMotionToast(String title, String message, MotionToastStyle style) {
+        MotionToast.Companion.createColorToast(
+                this,
+                title,
+                message,
+                style,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.LONG_DURATION,
+                ResourcesCompat.getFont(this, R.font.poppins_regular)
+        );
     }
+
+
+    @Override
+    public void onMessageFailure(String message) {
+        showMotionToast("Category Budget", message, MotionToastStyle.WARNING);
+    }
+
+    @Override
+    public void onMessageLoading(boolean isLoading) {
+        if (isLoading){
+            layoutProgress.setVisibility(View.VISIBLE);
+            layoutCategory.setVisibility(View.GONE);
+        }else{
+            layoutProgress.setVisibility(View.GONE);
+            layoutCategory.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onCategoryExpenseSuccess(List<CategoryBudget> categoryList) {
+        this.categoryBudgetList = categoryList;
+        fetchUsedCategoryIds();
+
+    }
+
+    private void fetchUsedCategoryIds() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("Budget")
+                .whereEqualTo("idUser", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        usedCategoryIds.clear();
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String categoryId = document.getString("idCategory");
+                            usedCategoryIds.add(categoryId);
+                        }
+
+                        displayCategories(categoryBudgetList);
+                    } else {
+                        Log.d("CategoryBudgetActivity", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
 }
