@@ -25,6 +25,7 @@
                 android:src="@drawable/ic_default"
                 />
         </LinearLayout>
+
         <TextView
             android:id="@+id/incomeType"
             android:layout_width="wrap_content"
