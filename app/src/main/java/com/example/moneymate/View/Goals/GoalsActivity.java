@@ -2,22 +2,48 @@ package com.example.moneymate.View.Goals;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.example.moneymate.Controller.BudgetController;
+import com.example.moneymate.Controller.SavingGoalsController;
+import com.example.moneymate.Interface.GoalsListener;
+import com.example.moneymate.Model.Budget;
+import com.example.moneymate.Model.CategorySavingGoals;
+import com.example.moneymate.Model.SavingGoals;
 import com.example.moneymate.R;
+import com.example.moneymate.View.Dashboard.DashboardActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class GoalsActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Date;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
+
+public class GoalsActivity extends AppCompatActivity implements GoalsListener {
+    private String categoryId;
+    private FirebaseAuth mAuth;
+    private String userId;
     private Toolbar toolbar;
-    private ImageView categoryIcon;
+    private ImageView backArrow;
 
     private TextView categoryTitleText;
-    private LinearLayout submitButton,btnCancel;
-    private  String goalsCategory;
+    private ImageView categoryIcon;
+
+    private String selectedDate;
+    private EditText amountTextEdit;
+    private LinearLayout submitButton,cancelButton, layoutProgress;
+    private CardView layoutGoals;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,121 +55,128 @@ public class GoalsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
+        mAuth = FirebaseAuth.getInstance();
+        userId = mAuth.getCurrentUser().getUid();
+        categoryTitleText = findViewById(R.id.category_title);
+        categoryIcon = findViewById(R.id.img_category);
+        categoryId = getIntent().getStringExtra("goalsCategory");
+        amountTextEdit = findViewById(R.id.amountTextEdit);
+        submitButton = findViewById(R.id.submitButton);
+        backArrow = findViewById(R.id.backArrow);
+        cancelButton = findViewById(R.id.cancelButton);
+        layoutGoals= findViewById(R.id.layoutGoals);
+        layoutProgress = findViewById(R.id.layoutProgress);
 
-        btnCancel = findViewById(R.id.cancelButton);
-        btnCancel.setOnClickListener(v -> {
-            Intent intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
+        backArrow = findViewById(R.id.backArrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        cancelButton.setOnClickListener(view -> {
+            Intent intent = new Intent(GoalsActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
         });
 
-        categoryTitleText = findViewById(R.id.category_title);
-        categoryIcon = findViewById(R.id.img_category);
-        goalsCategory = getIntent().getStringExtra("goalsCategory");
-        updateCategoryUI(goalsCategory);
+        if (categoryId != null) {
+            SavingGoalsController savingGoalsController = new SavingGoalsController();
+            savingGoalsController.setGoalsListener(this);
+            savingGoalsController.getCategoryDataById(categoryId);
+        }
 
-        submitButton = findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(v -> {
-            Intent intent = getIntent();
-            switch (goalsCategory) {
-                case "New Vehicle":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusNewVehicleCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Charity":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusCharityCategory", true);
-                    startActivity(intent);
-                    break;
+        submitButton.setOnClickListener(view -> submitGoals());
 
-                case "New Home":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusNewHomeCategory", true);
-                    startActivity(intent);
-                    break;
-                case "EmergencyFund":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusEmergencyFundCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Investment":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusInvestmentCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Education":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusEducationCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Holiday Trip":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusHolidayTripCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Health Care":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusHealthCareCategory", true);
-                    startActivity(intent);
-                    break;
-                case "Special Purchase":
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusSpecialPurchaseCategory", true);
-                    startActivity(intent);
-                    break;
-                default:
-                    intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
-                    intent.putExtra("statusNewVehicleCategory", true);
-                    startActivity(intent);
-                    break;
-            }
-        });
+
+
     }
 
-    private void updateCategoryUI(String category) {
-        switch (category) {
-            case "New Vehicle":
-                categoryTitleText.setText("New Vehicle");
-                categoryIcon.setImageResource(R.drawable.ic_new_vehivcle);
-                break;
-            case "Charity":
-                categoryTitleText.setText("Charity");
-                categoryIcon.setImageResource(R.drawable.ic_charity);
-                break;
+    private void submitGoals() {
+        String amountStr = amountTextEdit.getText().toString();
 
-            case "New Home":
-                categoryTitleText.setText("New Home");
-                categoryIcon.setImageResource(R.drawable.ic_new_home);
-                break;
-            case "Emergency Fund":
-                categoryTitleText.setText("Emergency Fund");
-                categoryIcon.setImageResource(R.drawable.ic_emergency_fund);
-                break;
-            case "Investment":
-                categoryTitleText.setText("Investment");
-                categoryIcon.setImageResource(R.drawable.ic_investment);
-                break;
-            case "Education":
-                categoryTitleText.setText("Education");
-                categoryIcon.setImageResource(R.drawable.ic_education);
-                break;
-            case "Holiday Trip":
-                categoryTitleText.setText("Holiday Trip");
-                categoryIcon.setImageResource(R.drawable.ic_holiday_trip);
-                break;
-            case "Health Care":
-                categoryTitleText.setText("Health Care");
-                categoryIcon.setImageResource(R.drawable.ic_health_care);
-                break;
-            case "Special Purchase":
-                categoryTitleText.setText("Special Purchase");
-                categoryIcon.setImageResource(R.drawable.ic_special_purchase);
-                break;
-            default:
-                categoryTitleText.setText("New Vehicle");
-                categoryIcon.setImageResource(R.drawable.ic_new_vehivcle);
-                break;
+        if (amountStr.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double amount = Double.parseDouble(amountStr);
+        Date createdAt = new Date();
+        Date updatedAt = new Date();
+
+
+
+
+        SavingGoalsController savingGoalsController = new SavingGoalsController();
+        savingGoalsController.setGoalsListener(this);
+        SavingGoals newGoals = new SavingGoals(
+                null,
+                categoryId,
+                userId,
+                amount,
+                createdAt,
+                updatedAt,
+                new ArrayList<>()
+        );
+
+
+        savingGoalsController.saveGoals(newGoals);
+    }
+
+    private void showMotionToast(String title, String message, MotionToastStyle style) {
+        MotionToast.Companion.createColorToast(
+                this,
+                title,
+                message,
+                style,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.LONG_DURATION,
+                ResourcesCompat.getFont(this, R.font.poppins_regular)
+        );
+    }
+
+    @Override
+    public void onGetGoalsSuccess(CategorySavingGoals category) {
+
+        if (category != null) {
+            categoryTitleText.setText(category.getGoalsCategoryName());
+            String imageName = category.getCategoryGoalsImage();
+            int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            if (imageResId != 0) {
+                categoryIcon.setImageResource(imageResId);
+            } else {
+                categoryIcon.setImageResource(R.drawable.ic_default);
+            }
+        }
+
+    }
+
+    @Override
+    public void onMessageSuccess(String message) {
+
+        showMotionToast("Saving Goals" , message , MotionToastStyle.SUCCESS);
+        amountTextEdit.setText("");
+
+        Intent intent = new Intent(GoalsActivity.this, SetGoalsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onMessageFailure(String message) {
+        showMotionToast("Saving Goals" , message , MotionToastStyle.ERROR);
+    }
+
+    @Override
+    public void onMessageLoading(boolean isLoading) {
+        if (isLoading){
+            layoutProgress.setVisibility(View.VISIBLE);
+            layoutGoals.setVisibility(View.GONE);
+        }else{
+            layoutProgress.setVisibility(View.GONE);
+            layoutGoals.setVisibility(View.VISIBLE);
         }
     }
 }

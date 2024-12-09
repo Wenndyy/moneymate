@@ -2,34 +2,50 @@ package com.example.moneymate.View.Goals;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.example.moneymate.Controller.CategoryBudgetController;
+import com.example.moneymate.Controller.CategorySavingGoalsController;
+import com.example.moneymate.Interface.CategorySavingGoalsListener;
+import com.example.moneymate.Model.CategoryBudget;
+import com.example.moneymate.Model.CategorySavingGoals;
 import com.example.moneymate.R;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class CategoryGoalsActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
+
+public class CategoryGoalsActivity extends AppCompatActivity implements CategorySavingGoalsListener {
     private Toolbar toolbar;
     private ImageView backArrow;
     private MaterialButton nextButton;
     private String goalsCategory = "";
-    private boolean statusNewVehicleCategory = false;
-    private boolean statusCharityCategory = false;
-    private boolean statusNewHomeCategory = false;
-    private boolean statusEmergencyFundCategory = false;
-    private boolean statusInvestmentCategory = false;
-    private boolean statusEducationCategory = false;
-    private boolean statusHolidayTripCategory = false;
-    private boolean statusHealthCareCategory = false;
-    private boolean statusSpecialPurchaseCategory = false;
-    private LinearLayout newVehicleCategory, charityCategory, newHomeCategory, emergencyFundCategory,investmentCategory, educationCategory, holidayTripCategory, healthCareCategory, specialPurchaseCategory;
+    private List<CategorySavingGoals> categorySavingGoalsList;
+    private GridLayout categoryGrid;
+    private CategorySavingGoalsController categorySavingGoalsController;
+    private CardView layoutCategory;
+    private LinearLayout  layoutProgress;
 
-
+    private List<String> usedCategoryIds = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +62,12 @@ public class CategoryGoalsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goalsCategory = "";
-                resetCategories();
                 onBackPressed();
             }
         });
+
+        layoutCategory = findViewById(R.id.layoutCategory);
+        layoutProgress = findViewById(R.id.layoutProgress);
 
         nextButton = findViewById(R.id.nextButton);
         nextButton.setEnabled(false);
@@ -59,111 +77,72 @@ public class CategoryGoalsActivity extends AppCompatActivity {
                 if (!goalsCategory.isEmpty()) {
                     Intent intent = new Intent(CategoryGoalsActivity.this, GoalsActivity.class);
                     intent.putExtra("goalsCategory", goalsCategory);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    resetCategories();
                     startActivity(intent);
                 }
             }
         });
-        newVehicleCategory = findViewById(R.id.new_vehicle_category);
-        charityCategory = findViewById(R.id.charity_category);
-        newHomeCategory = findViewById(R.id.new_home_category);
-        emergencyFundCategory = findViewById(R.id.emergency_fund_category);
-        investmentCategory = findViewById(R.id.investment_category);
-        educationCategory = findViewById(R.id.education_category);
-        holidayTripCategory = findViewById(R.id.holiday_trip_category);
-        healthCareCategory = findViewById(R.id.health_care_category);
-        specialPurchaseCategory = findViewById(R.id.special_purchase_category);
 
 
-        newVehicleCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(newVehicleCategory, "New Vehicle");
-            }
-        });
+        categorySavingGoalsList = new ArrayList<>();
+        categoryGrid = findViewById(R.id.categoryGrid);
 
-        charityCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(charityCategory, "Charity");
-            }
-        });
-
-        newHomeCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(newHomeCategory,"New Home");
-            }
-        });
-
-        emergencyFundCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(emergencyFundCategory,"Emergency Fund");
-            }
-        });
-        investmentCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(investmentCategory,"Investment");
-            }
-        });
-        educationCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(educationCategory, "Education");
-            }
-        });
-        holidayTripCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(holidayTripCategory,"Holiday Trip");
-            }
-        });
-        healthCareCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(healthCareCategory,"Health Care");
-            }
-        });
-        specialPurchaseCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectCategory(specialPurchaseCategory,"Special Purchase");
-            }
-        });
-        statusNewVehicleCategory = getIntent().getBooleanExtra("statusNewVehicleCategory", false);
-        statusCharityCategory= getIntent().getBooleanExtra("statusCharityCategory", false);
-        statusNewHomeCategory = getIntent().getBooleanExtra("statusNewHomeCategory", false);
-        statusEmergencyFundCategory = getIntent().getBooleanExtra("statusEmergencyFundCategory", false);
-        statusInvestmentCategory = getIntent().getBooleanExtra("statusInvestmentCategory", false);
-        statusEducationCategory = getIntent().getBooleanExtra("statusEducationCategory", false);
-        statusHolidayTripCategory = getIntent().getBooleanExtra("statusHolidayTripCategory", false);
-        statusHealthCareCategory = getIntent().getBooleanExtra("statusHealthCareCategory", false);
-        statusSpecialPurchaseCategory = getIntent().getBooleanExtra("statusSpecialPurchaseCategory", false);
+        categorySavingGoalsController = new CategorySavingGoalsController("","","",new Date(),new Date());
+        categorySavingGoalsController.setcategorySavingGoalsListener(this);
 
 
-        setupCategoryClickListener(newVehicleCategory, "New Vehicle", statusNewVehicleCategory);
-        setupCategoryClickListener(charityCategory, "Charity", statusCharityCategory);
-        setupCategoryClickListener(newHomeCategory, "New Home", statusNewHomeCategory);
-        setupCategoryClickListener(emergencyFundCategory, "Emergency Fund", statusEmergencyFundCategory);
-        setupCategoryClickListener(investmentCategory, "Investment", statusInvestmentCategory);
-        setupCategoryClickListener(educationCategory, "Education", statusEducationCategory);
-        setupCategoryClickListener(holidayTripCategory, "Holiday Trip", statusHolidayTripCategory);
-        setupCategoryClickListener(healthCareCategory, "Health Care", statusHealthCareCategory);
-        setupCategoryClickListener(specialPurchaseCategory, "Special Purchase", statusSpecialPurchaseCategory);
-
-
-        updateCategoryAppearance();
-
+        categorySavingGoalsController.getCategorySavingGoals();
     }
 
-    private void setupCategoryClickListener(LinearLayout categoryLayout, String category, boolean status) {
-        categoryLayout.setOnClickListener(v -> {
-            if (!status) {
-                selectCategory(categoryLayout, category);
+
+    private void displayCategories(List<CategorySavingGoals> categoryList) {
+        categoryGrid.removeAllViews();
+
+        for (CategorySavingGoals category : categoryList) {
+            View categoryView = LayoutInflater.from(this).inflate(R.layout.item_category, null);
+            ImageView categoryIcon = categoryView.findViewById(R.id.categoryIcon);
+            TextView categoryName = categoryView.findViewById(R.id.categoryName);
+
+            categoryName.setText(category.getGoalsCategoryName());
+            String imageName = category.getCategoryGoalsImage();
+            int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
+            if (imageResId != 0) {
+                categoryIcon.setImageResource(imageResId);
+            } else {
+                categoryIcon.setImageResource(R.drawable.ic_default);
             }
-        });
+
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(16, 16, 16, 16);
+            categoryView.setLayoutParams(params);
+
+
+            if (usedCategoryIds.contains(category.getIdGoalsCategory())) {
+
+                categoryView.setAlpha(0.5f);
+                categoryView.setEnabled(false);
+            } else {
+
+                categoryView.setBackgroundResource(R.drawable.bg_category_icon);
+                categoryView.setAlpha(1.0f);
+                categoryView.setEnabled(true);
+
+
+                categoryView.setOnClickListener(v -> {
+                    goalsCategory = category.getIdGoalsCategory();
+                    selectCategory((LinearLayout) categoryView, category.getIdGoalsCategory());
+                    nextButton.setEnabled(true);
+                });
+            }
+
+            categoryGrid.addView(categoryView);
+        }
     }
+
 
     private void selectCategory(LinearLayout selectedCategoryLayout, String category) {
         resetCategories();
@@ -172,37 +151,73 @@ public class CategoryGoalsActivity extends AppCompatActivity {
         nextButton.setEnabled(true);
     }
 
-    private void resetCategories() {
-        resetCategoryBackground(newVehicleCategory, statusNewVehicleCategory);
-        resetCategoryBackground(charityCategory, statusCharityCategory);
-        resetCategoryBackground(newHomeCategory, statusNewHomeCategory);
-        resetCategoryBackground(emergencyFundCategory, statusEmergencyFundCategory);
-        resetCategoryBackground(investmentCategory, statusInvestmentCategory);
-        resetCategoryBackground(educationCategory, statusEducationCategory);
-        resetCategoryBackground(holidayTripCategory, statusHolidayTripCategory);
-        resetCategoryBackground(healthCareCategory, statusHealthCareCategory);
-        resetCategoryBackground(specialPurchaseCategory, statusSpecialPurchaseCategory);
-    }
 
-    private void resetCategoryBackground(LinearLayout category, boolean status) {
-        if (status) {
-            category.setBackgroundResource(R.drawable.bg_disabled_category_icon);
-            category.setAlpha(0.5f);
-        } else {
-            category.setBackgroundResource(R.drawable.bg_category_icon);
-            category.setAlpha(1.0f);
+    private void resetCategories() {
+        for (int i = 0; i < categoryGrid.getChildCount(); i++) {
+            View child = categoryGrid.getChildAt(i);
+            if (child instanceof LinearLayout) {
+                child.setBackgroundResource(R.drawable.bg_category_icon);
+            }
         }
     }
 
-    private void updateCategoryAppearance() {
-        resetCategoryBackground(newVehicleCategory, statusNewVehicleCategory);
-        resetCategoryBackground(charityCategory, statusCharityCategory);
-        resetCategoryBackground(newHomeCategory, statusNewHomeCategory);
-        resetCategoryBackground(emergencyFundCategory, statusEmergencyFundCategory);
-        resetCategoryBackground(investmentCategory, statusInvestmentCategory);
-        resetCategoryBackground(educationCategory, statusEducationCategory);
-        resetCategoryBackground(holidayTripCategory, statusHolidayTripCategory);
-        resetCategoryBackground(healthCareCategory, statusHealthCareCategory);
-        resetCategoryBackground(specialPurchaseCategory, statusSpecialPurchaseCategory);
+    private void showMotionToast(String title, String message, MotionToastStyle style) {
+        MotionToast.Companion.createColorToast(
+                this,
+                title,
+                message,
+                style,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.LONG_DURATION,
+                ResourcesCompat.getFont(this, R.font.poppins_regular)
+        );
+    }
+
+
+    @Override
+    public void onMessageFailure(String message) {
+        showMotionToast("Category Saving Goal", message, MotionToastStyle.WARNING);
+    }
+
+    @Override
+    public void onMessageLoading(boolean isLoading) {
+        if (isLoading){
+            layoutProgress.setVisibility(View.VISIBLE);
+            layoutCategory.setVisibility(View.GONE);
+        }else{
+            layoutProgress.setVisibility(View.GONE);
+            layoutCategory.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
+    @Override
+    public void onCategorySavingGoalsSuccess(List<CategorySavingGoals> categoryList) {
+        this.categorySavingGoalsList = categoryList;
+        fetchUsedCategoryIds();
+
+    }
+
+    private void fetchUsedCategoryIds() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("SavingGoals")
+                .whereEqualTo("idUser", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        usedCategoryIds.clear();
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String categoryId = document.getString("idCategory");
+                            usedCategoryIds.add(categoryId);
+                        }
+
+                        displayCategories(categorySavingGoalsList);
+                    } else {
+                        Log.d("CategorySavingGoalsActivity", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 }

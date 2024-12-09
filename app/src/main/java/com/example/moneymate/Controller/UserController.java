@@ -3,6 +3,7 @@ package com.example.moneymate.Controller;
 import android.content.Context;
 
 import com.example.moneymate.Interface.MessageListener;
+import com.example.moneymate.Interface.ProfileListener;
 import com.example.moneymate.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,6 +17,7 @@ public class UserController extends User {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private MessageListener messageListener;
+    private ProfileListener profileListener;
     public UserController(String idUser, String email, String fullname, String noTelepon, String password, Date created_at, Date updated_at) {
         super(idUser, email, fullname, noTelepon, password, created_at, updated_at);
         mAuth = FirebaseAuth.getInstance();
@@ -89,14 +91,14 @@ public class UserController extends User {
 
     @Override
     public void logout() {
-        messageListener.onMessageLoading(true);
+        profileListener.onMessageLoading(true);
         try {
             mAuth.signOut();
-            messageListener.onMessageSuccess("Logout Success");
+            profileListener.onMessageLogoutSuccess("Logout Success");
         } catch (Exception e) {
-            messageListener.onMessageFailure("Logout Failed: " + e.getMessage());
+            profileListener.onMessageLogoutFailure("Logout Failed: " + e.getMessage());
         } finally {
-            messageListener.onMessageLoading(false);
+            profileListener.onMessageLoading(false);
         }
     }
 
@@ -104,5 +106,9 @@ public class UserController extends User {
 
     public void setMessageListener(MessageListener messageListener) {
         this.messageListener = messageListener;
+    }
+
+    public void setProfileListener(ProfileListener profileListener) {
+        this.profileListener = profileListener;
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow for the top -->
+    <item
+        android:right="2dp"
+        android:left="2dp"
+        android:top="8dp"
+        android:bottom="0dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#66000000"/> <!-- Shadow color (semi-transparent) -->
+        </shape>
+    </item>
+
+    <!-- Shadow for the bottom -->
+    <item
+        android:right="2dp"
+        android:left="2dp"
+        android:top="0dp"
+        android:bottom="8dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#66000000"/> <!-- Shadow color (semi-transparent) -->
+        </shape>
+    </item>
+
+    <!-- Shadow for the left -->
+    <item
+        android:right="8dp"
+        android:left="0dp"
+        android:top="2dp"
+        android:bottom="2dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#66000000"/> <!-- Shadow color (semi-transparent) -->
+        </shape>
+    </item>
+
+    <!-- Shadow for the right -->
+    <item
+        android:right="0dp"
+        android:left="8dp"
+        android:top="2dp"
+        android:bottom="2dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#66000000"/> <!-- Shadow color (semi-transparent) -->
+        </shape>
+    </item>
+</layer-list>

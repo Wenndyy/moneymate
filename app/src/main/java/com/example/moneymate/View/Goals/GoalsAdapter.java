@@ -1,11 +1,7 @@
-package com.example.moneymate.View.Budget;
-
-
-import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
+package com.example.moneymate.View.Goals;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneymate.R;
-import com.example.moneymate.View.Goals.GoalsDetailActivity;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,38 +20,39 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder> {
-    private List<Map<String, Object>> budgetList;
+public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalsViewHolder>{
+    private List<Map<String, Object>> goalsList;
     private Context context;
-
-    public BudgetAdapter(Context context) {
+    public GoalsAdapter(Context context) {
         this.context = context;
-        this.budgetList = new ArrayList<>();
+        this.goalsList = new ArrayList<>();
     }
 
-    public void setBudgetList(List<Map<String, Object>> budgetList) {
-        this.budgetList = budgetList;
+    public void setGoalsList(List<Map<String, Object>> goalsList) {
+        this.goalsList = goalsList;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public BudgetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GoalsAdapter.GoalsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_budget, parent, false);
-        return new BudgetViewHolder(view);
+        return new GoalsViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull BudgetViewHolder holder, int position) {
-        Map<String, Object> budgetItem = budgetList.get(position);
 
-        String categoryId = (String) budgetItem.get("categoryId");
-        String idBudget = (String) budgetItem.get("idBudget");
-        String categoryName = (String) budgetItem.get("categoryName");
-        String categoryImage = (String) budgetItem.get("categoryImage");
-        double budgetAmount = (double) budgetItem.get("budgetAmount");
-        double totalSpent = (double) budgetItem.get("totalSpent");
-        double percentage = (double) budgetItem.get("percentage");
+    @Override
+    public void onBindViewHolder(@NonNull GoalsViewHolder holder, int position) {
+
+        Map<String, Object> goalsItem = goalsList.get(position);
+
+        String categoryId = (String) goalsItem.get("categoryId");
+        String idGoals = (String) goalsItem.get("idGoals");
+        String categoryName = (String) goalsItem.get("categoryName");
+        String categoryImage = (String) goalsItem.get("categoryImage");
+        double budgetAmount = (double) goalsItem.get("budgetAmount");
+        double totalSpent = (double) goalsItem.get("totalSpent");
+        double percentage = (double) goalsItem.get("percentage");
 
         // Mengatur gambar kategori
         if (categoryImage != null && !categoryImage.isEmpty()) {
@@ -78,10 +74,11 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         holder.progressFood.setProgress((int) totalSpent);
         holder.tvFoodPercentage.setText(String.format("%.1f%%", percentage));
 
+
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BudgetDetailActivity.class);
+            Intent intent = new Intent(context, GoalsDetailActivity.class);
             intent.putExtra("categoryId",categoryId);
-            intent.putExtra("idBudget",idBudget);
+            intent.putExtra("idGoals",idGoals);
             intent.putExtra("categoryImage",categoryImage);
             intent.putExtra("categoryName", categoryName);
             intent.putExtra("budgetAmount", budgetAmount);
@@ -89,12 +86,12 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
             intent.putExtra("percentage", percentage);
             context.startActivity(intent);
         });
-    }
 
+    }
 
     @Override
     public int getItemCount() {
-        return budgetList.size();
+        return goalsList.size();
     }
 
 
@@ -104,12 +101,12 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         return formatRupiah.format(amount);
     }
 
-    class BudgetViewHolder extends RecyclerView.ViewHolder {
+    class GoalsViewHolder extends RecyclerView.ViewHolder {
         TextView categoryName, amount, tvFoodPercentage;
         ProgressBar progressFood;
         ImageView categoryImage, detailFood;
 
-        BudgetViewHolder(@NonNull View itemView) {
+        GoalsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             categoryName = itemView.findViewById(R.id.categoryName);
