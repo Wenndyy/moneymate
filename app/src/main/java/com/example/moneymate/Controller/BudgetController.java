@@ -256,7 +256,7 @@ public class BudgetController extends Budget{
             return;
         }
 
-        // Menggunakan whereIn untuk mendapatkan semua dokumen dengan idExpense yang ada di itemBudget
+
         db.collection("Expense")
                 .whereIn("idExpense", budget.getItemBudget())
                 .whereEqualTo("idCategoryExpense", budget.getIdCategory())
@@ -287,7 +287,7 @@ public class BudgetController extends Budget{
                     budgetDetail.put("totalSpent", totalAmount);
                     budgetDetail.put("percentage", percentage);
 
-                    // Menambahkan detail ke daftar budget
+
                     budgetDetailList.add(budgetDetail);
 
                     budgetDetailListener.onBudgetDetailsLoaded(budgetDetailList);
@@ -316,7 +316,7 @@ public class BudgetController extends Budget{
                 .whereEqualTo("idCategory", categoryId)
                 .get()
                 .addOnSuccessListener(budgetQuery -> {
-                    // Log jumlah budget yang ditemukan
+
                     Log.d("BudgetController", "Found " + budgetQuery.size() + " budgets for user: " + userId);
 
                     if (budgetQuery.isEmpty()) {
@@ -331,7 +331,7 @@ public class BudgetController extends Budget{
                     for (DocumentSnapshot budgetDoc : budgetQuery.getDocuments()) {
                         Budget budget = budgetDoc.toObject(Budget.class);
 
-                        // Log detail setiap budget
+
                         Log.d("BudgetController", "Budget ID: " + budget.getIdBudget());
                         Log.d("BudgetController", "Category ID: " + budget.getIdCategory());
                         Log.d("BudgetController", "Item Budget: " + budget.getItemBudget());

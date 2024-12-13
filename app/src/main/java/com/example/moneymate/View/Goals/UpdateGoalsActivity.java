@@ -31,6 +31,7 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
     private ImageView categoryImageView;
     private TextView categoryNameView;
     private EditText amountView;
+    private ImageView backArrow;
 
     private String goalId;
     @Override
@@ -45,6 +46,14 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
             Intent intent = new Intent(UpdateGoalsActivity.this, SetGoalsActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        backArrow = findViewById(R.id.backArrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
         Intent intent = getIntent();

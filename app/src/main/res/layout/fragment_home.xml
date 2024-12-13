@@ -30,7 +30,7 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="18dp"
+                android:layout_height="18sp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="Home!"
                 android:textColor="@color/white"
@@ -43,7 +43,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="20sp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Good Morning,"
                     android:textColor="@color/white"
@@ -57,7 +57,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text="USER "
                     android:textColor="@color/white"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -72,9 +72,11 @@
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:weightSum="4"
                     android:orientation="horizontal">
                     <LinearLayout
                         android:id="@+id/income"
+                        android:layout_weight="1"
                         android:layout_marginRight="40dp"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -98,10 +100,11 @@
                             android:text="Income"
                             android:textColor="@color/black"
                             android:fontFamily="@font/poppins_light"
-                            android:textSize="12dp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/expense"
+                        android:layout_weight="1"
                         android:layout_marginRight="40dp"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -126,9 +129,10 @@
                             android:text="Expense"
                             android:textColor="@color/black"
                             android:fontFamily="@font/poppins_light"
-                            android:textSize="12dp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
                     <LinearLayout
+                        android:layout_weight="1"
                         android:id="@+id/budget"
                         android:layout_gravity="center"
                         android:layout_marginRight="35dp"
@@ -153,10 +157,11 @@
                             android:text="Budget"
                             android:textColor="@color/black"
                             android:fontFamily="@font/poppins_light"
-                            android:textSize="12dp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/goals"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:layout_width="wrap_content"
@@ -179,7 +184,7 @@
                             android:text="Goals"
                             android:textColor="@color/black"
                             android:fontFamily="@font/poppins_light"
-                            android:textSize="12dp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -201,7 +206,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:text="Income"
                         android:textColor="@color/secondry2"
                         android:fontFamily="@font/poppins_medium"/>
@@ -209,7 +214,7 @@
                         android:id="@+id/totalIncome"
                         android:layout_width="121dp"
                         android:layout_height="24dp"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:text="+ Rp 0"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -227,7 +232,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13dp"
+                        android:textSize="13sp"
                         android:text="Expense"
                         android:textColor="#FFFF5252"
                         android:fontFamily="@font/poppins_medium"/>
@@ -237,7 +242,7 @@
                         android:layout_height="24dp"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:text="- Rp 0"
                         android:textColor="#FFFF5252"
                         android:fontFamily="@font/poppins_semibold"/>
@@ -253,7 +258,7 @@
                 android:textColor="#FF456974"
                 android:text="Last income record overview"
                 android:fontFamily="@font/poppins_semibold"
-                android:textSize="18dp"/>
+                android:textSize="18sp"/>
 
             <!-- Card Layout -->
             <LinearLayout
@@ -284,7 +289,7 @@
                 android:textColor="#FF456974"
                 android:text="Last expense record overview"
                 android:fontFamily="@font/poppins_semibold"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 />
 
             <!-- Card Layout -->

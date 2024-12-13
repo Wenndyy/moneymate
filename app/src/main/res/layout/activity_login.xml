@@ -98,15 +98,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <TextView
-                android:id="@+id/forgotPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Forgot your password?"
-                android:textColor="#808080"
-                android:layout_marginTop="10dp"
-                android:textSize="14sp"
-                android:layout_gravity="end"/>
 
             <Button
                 android:id="@+id/loginButton"

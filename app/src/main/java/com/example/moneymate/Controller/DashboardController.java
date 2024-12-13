@@ -47,7 +47,7 @@ public class DashboardController  {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
-                            // Mendapatkan data sebagai Map
+
                             Map<String, Object> userData = task.getResult().getData();
 
                             if (userData != null) {
@@ -143,7 +143,7 @@ public class DashboardController  {
                     if (task.isSuccessful()) {
                         double totalExpense = 0.0;
 
-                        // Iterasi melalui dokumen
+
                         for (DocumentSnapshot document : task.getResult()) {
                             Object amountObj = document.get("amount");
 
@@ -153,8 +153,6 @@ public class DashboardController  {
                                 dashboardListener.onMessageFailure("Invalid amount format in document: " + document.getId());
                             }
                         }
-
-                        // Panggil listener untuk mengirimkan total income
                         dashboardListener.onLoadDataSuccess(Map.of("totalExpense", totalExpense));
 
                     } else {

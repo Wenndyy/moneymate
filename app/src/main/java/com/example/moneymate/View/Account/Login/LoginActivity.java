@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements MessageListener 
             }
         });
 
-        forgotPasswordTextView = findViewById(R.id.forgotPassword);
+        //forgotPasswordTextView = findViewById(R.id.forgotPassword);
 
         forgotPasswordTextView.setOnClickListener(v -> {
             showForgotPasswordDialog();
