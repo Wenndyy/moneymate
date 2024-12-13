@@ -52,22 +52,11 @@ public class HistoryController {
                             }
 
                             if (latestIncome != null) {
-                                // Mengirim income terakhir dan semua income yang ditemukan ke listener
                                 recordListener.onLoadLastIncomeSuccess(latestIncome, incomeList);
-                            } else {
-                                // Tidak ada data income yang ditemukan
-                                recordListener.onMessageFailure("No income data found");
                             }
-                        } else {
-                            // Jika hasil query kosong
-                            recordListener.onMessageFailure("No income data found");
                         }
-                    } else {
-                        // Jika terjadi kesalahan saat pengambilan data
-                        recordListener.onMessageFailure("Failed to get data: " + task.getException().getMessage());
                     }
 
-                    // Menyembunyikan loading indicator
                     recordListener.onMessageLoading(false);
                 });
     }
@@ -85,7 +74,7 @@ public class HistoryController {
                         Expense latestExpense = null;
                         Date latestDate = null;
 
-                        // Periksa apakah data ditemukan
+
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Expense expense = document.toObject(Expense.class);
@@ -100,22 +89,10 @@ public class HistoryController {
                             }
 
                             if (latestExpense!= null) {
-                                // Mengirim income terakhir dan semua income yang ditemukan ke listener
                                 recordListener.onLoadLastExpenseSuccess(latestExpense, expenseList);
-                            } else {
-                                // Tidak ada data income yang ditemukan
-                                recordListener.onMessageFailure("No income data found");
                             }
-                        } else {
-                            // Jika hasil query kosong
-                            recordListener.onMessageFailure("No income data found");
                         }
-                    } else {
-                        // Jika terjadi kesalahan saat pengambilan data
-                        recordListener.onMessageFailure("Failed to get data: " + task.getException().getMessage());
                     }
-
-                    // Menyembunyikan loading indicator
                     recordListener.onMessageLoading(false);
                 });
     }

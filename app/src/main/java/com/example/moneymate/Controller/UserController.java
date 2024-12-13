@@ -18,8 +18,8 @@ public class UserController extends User {
     private FirebaseFirestore db;
     private MessageListener messageListener;
     private ProfileListener profileListener;
-    public UserController(String idUser, String email, String fullname, String noTelepon, String password, Date created_at, Date updated_at) {
-        super(idUser, email, fullname, noTelepon, password, created_at, updated_at);
+    public UserController(String idUser, String email, String fullname, String noTelepon, Date created_at, Date updated_at) {
+        super(idUser, email, fullname, noTelepon, created_at, updated_at);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
@@ -48,46 +48,52 @@ public class UserController extends User {
                 .whereEqualTo("email", email)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        messageListener.onMessageFailure("Email is already registered!");
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().isEmpty()) {
+                            // Email sudah terdaftar
+                            messageListener.onMessageFailure("Email is already registered!");
+                            messageListener.onMessageLoading(false);
+                        } else {
+                            // Proses registrasi
+                            mAuth.createUserWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(registrationTask -> {
+                                        if (registrationTask.isSuccessful()) {
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            if (user != null) {
+                                                String userId = mAuth.getUid();
+                                                Map<String, Object> userData = new HashMap<>();
+                                                userData.put("idUser", userId);
+                                                userData.put("email", email);
+                                                userData.put("fullname", getFullname());
+                                                userData.put("noTelepon", getNoTelepon());
+                                                userData.put("created_at", new Date());
+                                                userData.put("updated_at", new Date());
+
+                                                db.collection("User").document(userId)
+                                                        .set(userData)
+                                                        .addOnCompleteListener(firestoreTask -> {
+                                                            if (firestoreTask.isSuccessful()) {
+                                                                messageListener.onMessageSuccess("Registration Successful!");
+                                                            } else {
+                                                                messageListener.onMessageFailure("Failed to save user data");
+                                                            }
+
+                                                            messageListener.onMessageLoading(false);
+                                                        });
+                                            }
+                                        } else {
+                                            messageListener.onMessageFailure("Registrasi Failed!");
+                                            messageListener.onMessageLoading(false);
+                                        }
+                                    });
+                        }
                     } else {
-
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(registrationTask -> {
-                            if (registrationTask.isSuccessful()) {
-                                FirebaseUser  user = mAuth.getCurrentUser ();
-                                if (user != null) {
-
-                                    String userId = mAuth.getUid();
-
-                                    Map<String, Object> userData = new HashMap<>();
-                                    userData.put("idUser", userId);
-                                    userData.put("email", email);
-                                    userData.put("fullname", getFullname());
-                                    userData.put("noTelepon", getNoTelepon());
-                                    userData.put("created_at", new Date());
-                                    userData.put("updated_at", new Date());
-
-                                    db.collection("User").document(userId)
-                                            .set(userData)
-                                            .addOnCompleteListener(firestoreTask -> {
-                                                if (firestoreTask.isSuccessful()) {
-                                                    messageListener.onMessageSuccess("Registration Successful!");
-                                                } else {
-                                                    messageListener.onMessageFailure("Failed to save user data");
-                                                }
-
-
-                                            });
-                                }
-                            } else {
-                                messageListener.onMessageFailure("Registrasi Gagal!");
-                            }
-                        });
+                        messageListener.onMessageFailure("Failed to check email existence!");
+                        messageListener.onMessageLoading(false);
                     }
-                    messageListener.onMessageLoading(false);
                 });
     }
+
 
     @Override
     public void logout() {

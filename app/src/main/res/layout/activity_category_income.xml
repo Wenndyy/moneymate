@@ -79,15 +79,19 @@
             android:id="@+id/layoutCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:cardCornerRadius="18dp"
             android:layout_marginBottom="26dp"
             android:elevation="8dp">
             <LinearLayout
+                android:id="@+id/layoutCard"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="24dp"  >
+                android:layout_gravity="center"
+                android:padding="24dp">
                 <TextView
                     android:id="@+id/titleText"
                     android:layout_width="wrap_content"
@@ -104,10 +108,9 @@
                     android:id="@+id/categoryGrid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:columnCount="3"
                     android:rowCount="2"
-                    android:paddingHorizontal="10dp"
-                    android:layout_gravity="center"
                     android:alignmentMode="alignMargins"
                     android:columnOrderPreserved="false"
                     android:layout_marginTop="32dp"

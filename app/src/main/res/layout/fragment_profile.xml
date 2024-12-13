@@ -79,6 +79,7 @@
                android:layout_height="wrap_content"
                android:hint="HaloUser"
                android:enabled="false"
+               android:textColor="@color/grey"
                android:padding="12dp"
                android:background="@drawable/edittext_border"
                android:layout_marginBottom="16dp" />
@@ -96,6 +97,7 @@
                android:layout_height="wrap_content"
                android:hint="+62813xxxxxxx"
                android:enabled="false"
+               android:textColor="@color/grey"
                android:padding="12dp"
                android:background="@drawable/edittext_border"
                android:layout_marginBottom="16dp" />
@@ -113,6 +115,7 @@
                android:layout_height="wrap_content"
                android:hint="user@gmail.com"
                android:enabled="false"
+               android:textColor="@color/grey"
                android:padding="12dp"
                android:background="@drawable/edittext_border"
                android:layout_marginBottom="16dp" />

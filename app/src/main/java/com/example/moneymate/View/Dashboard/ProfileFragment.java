@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment implements ProfileListener {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserController account = new UserController("", "", "", "", "", null, null);
+                UserController account = new UserController("", "", "", "", null, null);
                 account.setProfileListener(ProfileFragment.this);
                 account.logout();
             }

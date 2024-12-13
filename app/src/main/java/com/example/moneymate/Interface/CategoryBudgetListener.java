@@ -1,7 +1,6 @@
 package com.example.moneymate.Interface;
 
 import com.example.moneymate.Model.CategoryBudget;
-import com.example.moneymate.Model.CategoryExpense;
 
 import java.util.List;
 

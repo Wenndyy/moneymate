@@ -2,7 +2,9 @@ package com.example.moneymate.View.Income;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
@@ -41,7 +43,8 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
     private GridLayout categoryGrid;
     private CategoryIncomeController categoryIncomeController;
     private CardView layoutCategory;
-    private LinearLayout  layoutProgress;
+    private LinearLayout  layoutProgress, layoutCard;
+    private double screenDiagonalInches;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
         });
         layoutCategory = findViewById(R.id.layoutCategory);
         layoutProgress = findViewById(R.id.layoutProgress);
+        layoutCard = findViewById(R.id.layoutCard);
 
         nextButton = findViewById(R.id.nextButton);
         nextButton.setEnabled(false);
@@ -85,10 +89,25 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
         categoryIncomeList = new ArrayList<>();
         categoryGrid = findViewById(R.id.categoryGrid);
 
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidthInches = displayMetrics.widthPixels / displayMetrics.xdpi;
+        float screenHeightInches = displayMetrics.heightPixels / displayMetrics.ydpi;
+        screenDiagonalInches = Math.sqrt(
+                Math.pow(screenWidthInches, 2) + Math.pow(screenHeightInches, 2)
+        );
+
+        if (screenDiagonalInches <= 6.4){
+            layoutCard.setPadding(20,20,20,20);
+        }else{
+            layoutCard.setPadding(24,24,24,24);
+            categoryGrid.setPadding(20,20,20,2);
+        }
+
+
+        categoryGrid.requestLayout();
+
         categoryIncomeController = new CategoryIncomeController("", "", "", new Date(), new Date());
         categoryIncomeController.setCategoryIncomeListener(CategoryIncomeActivity.this);
-
-
         categoryIncomeController.getCategoryIncome();
     }
 
@@ -114,6 +133,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
 
     private void displayCategories() {
         categoryGrid.removeAllViews();
+
         for (CategoryIncome category : categoryIncomeList) {
             View categoryView = LayoutInflater.from(this).inflate(R.layout.item_category, null);
             ImageView categoryIcon = categoryView.findViewById(R.id.categoryIcon);
@@ -131,15 +151,24 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
+
             params.setMargins(16, 16, 16, 16);
+
+
+
+
             categoryView.setLayoutParams(params);
+
+
             categoryView.setOnClickListener(v -> {
                 incomeCategory = category.getIdCategoryIncome();
                 selectCategory((LinearLayout) categoryView, category.getIdCategoryIncome());
                 nextButton.setEnabled(true);
             });
 
+
             categoryGrid.addView(categoryView);
+
         }
     }
 

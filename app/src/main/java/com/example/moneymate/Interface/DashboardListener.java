@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface DashboardListener {
-
-
     void onMessageFailure(String message);
     void onMessageLoading(boolean isLoading);
     void onLoadDataSuccess(Map<String, Object> data);

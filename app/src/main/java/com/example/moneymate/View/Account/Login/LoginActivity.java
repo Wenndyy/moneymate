@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements MessageListener 
                     return;
                 }
                 if (!(email.isEmpty() && password.isEmpty())){
-                    UserController account = new UserController("", email, "", "", password, new Date(), new Date());
+                    UserController account = new UserController("", email, "", "",  new Date(), new Date());
                     account.setMessageListener(LoginActivity.this);
                     account.login(email, password);
 
@@ -92,8 +92,7 @@ public class LoginActivity extends AppCompatActivity implements MessageListener 
             }
         });
 
-        //forgotPasswordTextView = findViewById(R.id.forgotPassword);
-
+        forgotPasswordTextView = findViewById(R.id.forgotPassword);
         forgotPasswordTextView.setOnClickListener(v -> {
             showForgotPasswordDialog();
         });

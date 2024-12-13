@@ -4,11 +4,8 @@ import android.util.Log;
 
 import com.example.moneymate.Interface.CategoryIncomeListener;
 import com.example.moneymate.Model.CategoryIncome;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -50,22 +47,14 @@ public class CategoryIncomeController extends CategoryIncome {
                             if (categoryIncomeListener != null) {
                                 categoryIncomeListener.onCategoryIncomeSuccess(categoryIncomeList);
                             }
-                        } else {
-                            if (categoryIncomeListener != null) {
-                                categoryIncomeListener.onMessageFailure("No categories found.");
-                            }
-                        }
-                    } else {
-                        if (categoryIncomeListener != null) {
-                            categoryIncomeListener.onMessageFailure("Error fetching categories: " + task.getException().getMessage());
                         }
                     }
                     categoryIncomeListener.onMessageLoading(false);
                 })
                 .addOnFailureListener(e -> {
-
                     if (categoryIncomeListener != null) {
-                        categoryIncomeListener.onMessageFailure("Error getting categories");
+                        Log.d("Category Income", "Error getting categories: ");
+
                     }
                     categoryIncomeListener.onMessageLoading(false);
                 });

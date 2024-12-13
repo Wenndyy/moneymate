@@ -62,7 +62,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Fullname"
+                        android:textColorHint="@color/grey"
                         android:padding="12dp"
+                        android:textColor="@color/black"
                         android:background="@drawable/edittext_border"
                         android:layout_marginBottom="16dp" />
                     <TextView
@@ -77,8 +79,11 @@
                         android:id="@+id/noPhoneTextEdit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey"
                         android:hint="No Phone"
+                        android:textColor="@color/black"
                         android:padding="12dp"
+                        android:inputType="number"
                         android:background="@drawable/edittext_border"
                         android:layout_marginBottom="16dp" />
                     <TextView
@@ -93,7 +98,9 @@
                         android:id="@+id/emailTextEdit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColorHint="@color/grey"
                         android:hint="Email"
+                        android:textColor="@color/black"
                         android:inputType="textEmailAddress"
                         android:padding="12dp"
                         android:background="@drawable/edittext_border"
@@ -125,9 +132,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Password"
+                            android:inputType="textPassword"
+                            android:textColorHint="@color/grey"
                             android:padding="12dp"
+                            android:textColor="@color/black"
                             android:background="@drawable/edittext_border"
-                            android:drawableEnd="@drawable/ic_visibility_off"
+                            android:drawableEnd="@drawable/ic_visibility_on"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -144,6 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/grey"
+
                         app:hintEnabled="false"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/secondry"
@@ -157,9 +168,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Confirm Password"
+                            android:textColor="@color/black"
+                            android:inputType="textPassword"
+                            android:textColorHint="@color/grey"
                             android:padding="12dp"
                             android:background="@drawable/edittext_border"
-                            android:drawableEnd="@drawable/ic_visibility_off"
+                            android:drawableEnd="@drawable/ic_visibility_on"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -178,6 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginBottom="20dp"
                         android:layout_gravity="center">
                         <TextView
                             android:layout_width="wrap_content"
@@ -212,6 +227,7 @@
                 android:id="@+id/layoutProgress"
                 android:orientation="vertical"
                 android:visibility="gone"
+                android:layout_gravity="center"
                 android:gravity="center">
                 <ProgressBar
                     android:id="@+id/progressBar"

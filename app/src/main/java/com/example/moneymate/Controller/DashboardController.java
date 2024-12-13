@@ -47,21 +47,11 @@ public class DashboardController  {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
-
                             Map<String, Object> userData = task.getResult().getData();
-
                             if (userData != null) {
-
                                 dashboardListener.onLoadDataSuccess(userData);
-
-                            } else {
-                                dashboardListener.onMessageFailure("User data is null.");
                             }
-                        } else {
-                            dashboardListener.onMessageFailure("User document not found.");
                         }
-                    } else {
-                        dashboardListener.onMessageFailure("Error retrieving user data: " + task.getException().getMessage());
                     }
                     dashboardListener.onMessageLoading(false);
                 });
@@ -78,21 +68,11 @@ public class DashboardController  {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
-                            // Mendapatkan data sebagai Map
                             Map<String, Object> userData = task.getResult().getData();
-
                             if (userData != null) {
-
                                 profileListener.onLoadDataSuccess(userData);
-
-                            } else {
-                                profileListener.onMessageFailure("User data is null.");
                             }
-                        } else {
-                            profileListener.onMessageFailure("User document not found.");
                         }
-                    } else {
-                        profileListener.onMessageFailure("Error retrieving user data: " + task.getException().getMessage());
                     }
                     profileListener.onMessageLoading(false);
                 });
@@ -109,23 +89,14 @@ public class DashboardController  {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         double totalIncome = 0.0;
-
-                        // Iterasi melalui dokumen
                         for (DocumentSnapshot document : task.getResult()) {
                             Object amountObj = document.get("amount");
 
                             if (amountObj instanceof Number) {
                                 totalIncome += ((Number) amountObj).doubleValue();
-                            } else {
-                                dashboardListener.onMessageFailure("Invalid amount format in document: " + document.getId());
                             }
                         }
-
-                        // Panggil listener untuk mengirimkan total income
                         dashboardListener.onLoadDataSuccess(Map.of("totalIncome", totalIncome));
-
-                    } else {
-                        dashboardListener.onMessageFailure("Failed to fetch income data: " + task.getException().getMessage());
                     }
                     dashboardListener.onMessageLoading(false);
                 });
@@ -133,30 +104,22 @@ public class DashboardController  {
 
     public void getTotalExpense() {
         dashboardListener.onMessageLoading(true);
-
         String idUser = mAuth.getCurrentUser().getUid();
-
         db.collection("Expense")
                 .whereEqualTo("idUser", idUser)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         double totalExpense = 0.0;
-
-
                         for (DocumentSnapshot document : task.getResult()) {
                             Object amountObj = document.get("amount");
 
                             if (amountObj instanceof Number) {
                                 totalExpense += ((Number) amountObj).doubleValue();
-                            } else {
-                                dashboardListener.onMessageFailure("Invalid amount format in document: " + document.getId());
                             }
                         }
                         dashboardListener.onLoadDataSuccess(Map.of("totalExpense", totalExpense));
 
-                    } else {
-                        dashboardListener.onMessageFailure("Failed to fetch income data: " + task.getException().getMessage());
                     }
                     dashboardListener.onMessageLoading(false);
                 });
@@ -175,14 +138,12 @@ public class DashboardController  {
                         Income latestIncome = null;
                         Date latestDate = null;
 
-                        // Periksa apakah data ditemukan
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Income income = document.toObject(Income.class);
                                 incomeList.add(income);
                                 Date createdAt = income.getDateOfIncome();
 
-                                // Mencari income dengan created_at terbaru
                                 if (latestDate == null || (createdAt != null && createdAt.after(latestDate))) {
                                     latestDate = createdAt;
                                     latestIncome = income;
@@ -190,22 +151,10 @@ public class DashboardController  {
                             }
 
                             if (latestIncome != null) {
-                                // Mengirim income terakhir dan semua income yang ditemukan ke listener
                                 dashboardListener.onLoadLastIncomeSuccess(latestIncome, incomeList);
-                            } else {
-                                // Tidak ada data income yang ditemukan
-                                dashboardListener.onMessageFailure("No income data found");
                             }
-                        } else {
-                            // Jika hasil query kosong
-                            dashboardListener.onMessageFailure("No income data found");
                         }
-                    } else {
-                        // Jika terjadi kesalahan saat pengambilan data
-                        dashboardListener.onMessageFailure("Failed to get data: " + task.getException().getMessage());
                     }
-
-                    // Menyembunyikan loading indicator
                     dashboardListener.onMessageLoading(false);
                 });
     }
@@ -223,14 +172,12 @@ public class DashboardController  {
                         Expense latestExpense = null;
                         Date latestDate = null;
 
-                        // Periksa apakah data ditemukan
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Expense expense = document.toObject(Expense.class);
                                 expenseList.add(expense);
                                 Date createdAt = expense.getDateOfExpense();
 
-                                // Mencari income dengan created_at terbaru
                                 if (latestDate == null || (createdAt != null && createdAt.after(latestDate))) {
                                     latestDate = createdAt;
                                     latestExpense = expense;
@@ -238,22 +185,10 @@ public class DashboardController  {
                             }
 
                             if (latestExpense!= null) {
-                                // Mengirim income terakhir dan semua income yang ditemukan ke listener
                                 dashboardListener.onLoadLastExpenseSuccess(latestExpense, expenseList);
-                            } else {
-                                // Tidak ada data income yang ditemukan
-                                dashboardListener.onMessageFailure("No income data found");
                             }
-                        } else {
-                            // Jika hasil query kosong
-                            dashboardListener.onMessageFailure("No income data found");
                         }
-                    } else {
-                        // Jika terjadi kesalahan saat pengambilan data
-                        dashboardListener.onMessageFailure("Failed to get data: " + task.getException().getMessage());
                     }
-
-                    // Menyembunyikan loading indicator
                     dashboardListener.onMessageLoading(false);
                 });
     }

@@ -3,9 +3,11 @@ package com.example.moneymate.View.Income;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,6 +51,8 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
     private LinearLayout submitButton,cancelButton, layoutProgress;
     private CardView layoutIncome;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
         cancelButton = findViewById(R.id.cancelButton);
         layoutIncome = findViewById(R.id.layoutIncome);
         layoutProgress = findViewById(R.id.layoutProgress);
+
 
 
         backArrow.setOnClickListener(new View.OnClickListener() {

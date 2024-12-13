@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
         }else if (data.containsKey("totalExpense")){
             double totalExpense = (double) data.get("totalExpense");
             TextView expenseTotalTextView = getView().findViewById(R.id.totalExpense);
-            expenseTotalTextView.setText("+ " + formatRupiah(totalExpense));
+            expenseTotalTextView.setText("- " + formatRupiah(totalExpense));
         }
     }
 
@@ -181,12 +181,11 @@ public class HomeFragment extends Fragment implements DashboardListener {
     @Override
     public void onLoadLastIncomeSuccess(Income lastIncome, List<Income> incomeList) {
         if (lastIncome != null) {
-            // Menyembunyikan dan menampilkan UI yang sesuai
             noValueIncome.setVisibility(View.GONE);
             recordIncomeLayout.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
 
-            // Inflating view untuk income terakhir
+
             View lastIncomeView = LayoutInflater.from(getActivity())
                     .inflate(R.layout.record_income_item, recordIncomeLayout, false);
 
@@ -194,22 +193,22 @@ public class HomeFragment extends Fragment implements DashboardListener {
             TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
             ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
 
-            // Mengambil kategori income dan menampilkan
+
             getIncomeCategory(lastIncome.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, lastIncome);
 
-            // Urutkan income berdasarkan tanggal terbaru
+
             Collections.sort(incomeList, (income1, income2) -> {
                 if (income1.getDateOfIncome() == null || income2.getDateOfIncome() == null) {
-                    return 0; // Jangan urutkan jika salah satu tanggal null
+                    return 0;
                 }
-                return income2.getDateOfIncome().compareTo(income1.getDateOfIncome()); // Urutkan dari terbaru
+                return income2.getDateOfIncome().compareTo(income1.getDateOfIncome());
             });
 
-            // Menampilkan hanya income yang berada di tanggal terbaru
+
             displayLatestIncome(incomeList);
 
         } else {
-            // Jika tidak ada data
+
             noValueIncome.setVisibility(View.VISIBLE);
             recordIncomeLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
@@ -219,12 +218,12 @@ public class HomeFragment extends Fragment implements DashboardListener {
     @Override
     public void onLoadLastExpenseSuccess(Expense lastExpense, List<Expense> expenseList) {
         if (lastExpense != null) {
-            // Menyembunyikan dan menampilkan UI yang sesuai
+
             noValueExpense.setVisibility(View.GONE);
             recordExpenseLayout.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
 
-            // Inflating view untuk income terakhir
+
             View lastIncomeView = LayoutInflater.from(getActivity())
                     .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
 
@@ -313,7 +312,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
                     view.setVisibility(View.VISIBLE);
                 }
 
-                addShowMoreTextView(dateLayout); // Menambahkan opsi untuk menampilkan lebih banyak data jika diperlukan
+                addShowMoreTextView(dateLayout);
 
                 // Menambahkan layout dateLayout ke layout utama
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(

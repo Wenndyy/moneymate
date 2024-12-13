@@ -78,17 +78,19 @@
         app:layout_constraintTop_toBottomOf="@id/appbar">
         <androidx.cardview.widget.CardView
             android:id="@+id/layoutCategory"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="18dp"
             android:layout_marginBottom="26dp"
             android:elevation="8dp">
             <LinearLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="24dp"  >
+                android:padding="24dp">
                 <TextView
                     android:id="@+id/titleText"
                     android:layout_width="wrap_content"

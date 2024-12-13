@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity implements MessageListen
                         showMotionToast("Register Account", "Password doesn't match!", MotionToastStyle.WARNING);
                         return;
                     }
-                    UserController account = new UserController("", email, fullname, noTelepon, password, new Date(), new Date());
+                    UserController account = new UserController("", email, fullname, noTelepon,  new Date(), new Date());
                     account.setMessageListener(RegisterActivity.this);
                     account.register(email, password);
 
