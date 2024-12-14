@@ -31,7 +31,7 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
     private ImageView categoryImageView;
     private TextView categoryNameView;
     private EditText amountView;
-    private ImageView backArrow;
+
 
     private String goalId;
     @Override
@@ -48,13 +48,6 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
             finish();
         });
 
-        backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         Intent intent = getIntent();
         goalId = intent.getStringExtra("idGoals");
@@ -121,6 +114,7 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
     public void onMessageSuccess(String message) {
         showMotionToast("Saving Goals" , message , MotionToastStyle.SUCCESS);
         Intent intent = new Intent(this, SetGoalsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }

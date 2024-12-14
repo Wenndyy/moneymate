@@ -30,7 +30,6 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
     private ImageView categoryImageView;
     private TextView categoryNameView;
     private EditText amountView;
-    private ImageView backArrow;
 
     private String idBudget;
     @Override
@@ -50,14 +49,6 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
         String categoryName = intent.getStringExtra("categoryName");
         String categoryImage = intent.getStringExtra("categoryImage");
         double goalAmount = intent.getDoubleExtra("budgetAmount", 0);
-        backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
         int amount = (int) goalAmount;
         categoryImageView = findViewById(R.id.img_category);
         amountView = findViewById(R.id.amountTextEdit);

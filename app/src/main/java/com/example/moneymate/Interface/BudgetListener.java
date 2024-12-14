@@ -14,8 +14,5 @@ public interface BudgetListener {
     void onMessageSuccess(String message);
     void onMessageFailure(String message);
     void onMessageLoading(boolean isLoading);
-    void onLoadDataExpenseSuccess(ArrayList<Budget> budgetList);
-    void onDataExpenseSuccess(Budget budget);
-    void onBudgetDataReady(List<Expense> expenses, double totalBudgetAmount, double totalItemAmount);
-    void onBudgetDetailsLoaded(List<Map<String, Object>> budgetDetails);
+
 }

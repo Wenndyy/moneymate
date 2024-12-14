@@ -194,7 +194,6 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
             layoutProgress.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            // Mengelompokkan data berdasarkan tanggal
             Map<String, ArrayList<ItemGoals>> groupedData = new HashMap<>();
             SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
 
@@ -208,7 +207,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
                 groupedData.get(formattedDate).add(itemGoals);
             }
 
-            // Tampilkan data yang sudah dikelompokkan
+
             displayGroupedItemGoals(groupedData);
 
             layoutProgress.setVisibility(View.GONE);
@@ -219,6 +218,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
     @Override
     public void onMessageSuccess(String message) {
         showMotionToast("Detail Saving Goals", message,MotionToastStyle.SUCCESS);
+        recordLayout.removeAllViews();
         Intent intent = new Intent(GoalsDetailActivity.this, SetGoalsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -277,7 +277,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
             // Add the dateLayout to the recordLayout
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(0, 5, 0, 0);
+            layoutParams.setMargins(0, 5, 0, 20);
             dateLayout.setLayoutParams(layoutParams);
             recordLayout.addView(dateLayout);
         }

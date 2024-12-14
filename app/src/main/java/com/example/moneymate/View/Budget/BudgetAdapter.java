@@ -73,7 +73,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         holder.categoryName.setText(categoryName);
         holder.amount.setText(formatCurrency(budgetAmount));
 
-        // Update progress bar berdasarkan jumlah yang telah dibelanjakan
+
         holder.progressFood.setMax((int) budgetAmount);
         holder.progressFood.setProgress((int) totalSpent);
         holder.tvFoodPercentage.setText(String.format("%.1f%%", percentage));
@@ -101,6 +101,8 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
     private String formatCurrency(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        formatRupiah.setMaximumFractionDigits(0);
+        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
     }
 

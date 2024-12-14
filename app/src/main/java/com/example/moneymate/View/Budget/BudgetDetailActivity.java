@@ -30,6 +30,7 @@ import com.example.moneymate.Model.Budget;
 import com.example.moneymate.Model.CategoryBudget;
 import com.example.moneymate.Model.Expense;
 import com.example.moneymate.R;
+import com.example.moneymate.View.Dashboard.DashboardActivity;
 import com.example.moneymate.View.Expense.RecordExpenseActivity;
 import com.example.moneymate.View.Expense.UpdateExpenseActivity;
 import com.example.moneymate.View.Goals.GoalsDetailActivity;
@@ -123,20 +124,12 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
 
         budgetController.loadExpenseDataByBudget(budgetId);
 
-
     }
 
-
-    private String formatCurrency(double amount) {
-        Locale localeID = new Locale("in", "ID");
-        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        return formatRupiah.format(amount);
-    }
 
 
     @Override
     public void onMessageFailure(String message) {
-
         showMotionToast("Detail Budget", message,MotionToastStyle.ERROR);
     }
 
@@ -146,7 +139,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
             layoutProgress.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            // Mengelompokkan data berdasarkan tanggal
             Map<String, ArrayList<Expense>> groupedData = new HashMap<>();
             SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
 
@@ -160,7 +152,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
                 groupedData.get(formattedDate).add(expense);
             }
 
-            // Tampilkan data yang sudah dikelompokkan
             displayGroupedExpense(groupedData);
 
             layoutProgress.setVisibility(View.GONE);
@@ -171,6 +162,7 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
     @Override
     public void onMessageSuccess(String message) {
         showMotionToast("Detail Budget", message,MotionToastStyle.SUCCESS);
+        recordLayout.removeAllViews();
         Intent intent = new Intent(BudgetDetailActivity.this, SetBudgetActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK );
         startActivity(intent);
@@ -180,7 +172,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
 
     @Override
     public void onMessageLoading(boolean isLoading) {
-
         if (isLoading){
             layoutProgress.setVisibility(View.VISIBLE);
             layoutBudget.setVisibility(View.GONE);
@@ -215,7 +206,7 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
             }
 
             categoryNameView.setText(categoryName);
-            amount.setText(formatCurrency(budgetAmount));
+            amount.setText(formatRupiah(budgetAmount));
             progress.setMax((int) budgetAmount);
             progress.setProgress((int) totalSpent);
             percentage.setText(String.format("%.1f%%", percentageBudget));
@@ -258,7 +249,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
                 TextView expenseAmount = expenseView.findViewById(R.id.incomeAmount);
                 ImageView categoryIcon = expenseView.findViewById(R.id.categoryIcon);
 
-                // Get category and update the expense view
                 getExpenseCategory(expense.getIdCategoryExpense(), expenseType, expenseAmount, categoryIcon, expense);
 
                 dateLayout.addView(expenseView);
@@ -273,10 +263,9 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
                 }
             }
 
-            // Add the dateLayout to the recordLayout
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(0, 5, 0, 0);
+            layoutParams.setMargins(0, 5, 0, 20);
             dateLayout.setLayoutParams(layoutParams);
             recordLayout.addView(dateLayout);
         }
@@ -323,6 +312,8 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        formatRupiah.setMaximumFractionDigits(0);
+        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
     }
 
@@ -331,8 +322,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_delete_budget, null);
         builder.setView(dialogView);
-
-
 
         TextView cancelButton = dialogView.findViewById(R.id.btn_cancel);
         TextView okButton = dialogView.findViewById(R.id.btn_ok);
@@ -352,7 +341,6 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
             @Override
             public void onClick(View v) {
                 budgetController.deleteBudget(idBudget);
-
                 dialog.dismiss();
             }
         });

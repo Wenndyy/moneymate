@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneymate.Controller.BudgetController;
 import com.example.moneymate.Interface.BudgetListener;
+import com.example.moneymate.Interface.SetBudgetListener;
 import com.example.moneymate.Model.Budget;
 import com.example.moneymate.Model.CategoryBudget;
 import com.example.moneymate.Model.Expense;
@@ -33,7 +34,7 @@ import java.util.Map;
 import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
 
-public class SetBudgetActivity extends AppCompatActivity  implements BudgetListener {
+public class SetBudgetActivity extends AppCompatActivity  implements SetBudgetListener {
     private Toolbar toolbar;
     private ImageView backArrow;
     private MaterialButton setBudgetButton;
@@ -75,7 +76,7 @@ public class SetBudgetActivity extends AppCompatActivity  implements BudgetListe
         recyclerViewBudget.setAdapter(budgetAdapter);
 
         budgetController = new BudgetController();
-        budgetController.setBudgetListener(this);
+        budgetController.setSetBudgetListener(this);
 
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -87,22 +88,8 @@ public class SetBudgetActivity extends AppCompatActivity  implements BudgetListe
             Log.e("SetBudgetActivity", "No user is currently logged in");
         }
 
-
-
-
     }
 
-    @Override
-    public void onGetExpenseSuccess(CategoryBudget category) {
-    }
-
-    @Override
-    public void onMessageSuccess(String message) {
-    }
-
-    @Override
-    public void onMessageFailure(String message) {
-    }
 
     @Override
     public void onMessageLoading(boolean isLoading) {
@@ -114,28 +101,8 @@ public class SetBudgetActivity extends AppCompatActivity  implements BudgetListe
             recyclerViewBudget.setVisibility(View.VISIBLE);
         }
     }
-
-
-    @Override
-    public void onLoadDataExpenseSuccess(ArrayList<Budget> budgetList) {
-
-    }
-
-    @Override
-    public void onDataExpenseSuccess(Budget budget) {
-
-    }
-
-    @Override
-    public void onBudgetDataReady(List<Expense> expenses, double totalBudgetAmount, double totalItemAmount) {
-
-    }
-
     @Override
     public void onBudgetDetailsLoaded(List<Map<String, Object>> budgetDetails) {
-        // Log untuk memastikan data diterima
-        Log.d("SetBudgetActivity", "Budget Details Received: " + (budgetDetails != null ? budgetDetails.size() : "null"));
-
         if (budgetDetails != null && !budgetDetails.isEmpty()) {
             budgetAdapter.setBudgetList(budgetDetails);
             recyclerViewBudget.setVisibility(View.VISIBLE);
@@ -144,8 +111,6 @@ public class SetBudgetActivity extends AppCompatActivity  implements BudgetListe
 
         }
     }
-
-
     private void showMotionToast(String title, String message, MotionToastStyle style) {
         MotionToast.Companion.createColorToast(
                 this,

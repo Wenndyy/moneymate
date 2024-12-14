@@ -213,7 +213,7 @@
                         android:id="@+id/totalIncome"
                         android:layout_width="121dp"
                         android:layout_height="24dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="+ Rp 0"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -241,7 +241,7 @@
                         android:layout_height="24dp"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="- Rp 0"
                         android:textColor="#FFFF5252"
                         android:fontFamily="@font/poppins_semibold"/>

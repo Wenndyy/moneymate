@@ -39,7 +39,6 @@ import www.sanju.motiontoast.MotionToastStyle;
 public class DepositActivity extends AppCompatActivity implements ItemDepositListener {
 
     private Toolbar toolbar;
-    private ImageView backArrow;
     private TextView categoryTitleText;
     private ImageView categoryIcon;
 
@@ -62,7 +61,6 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
         amountTextEdit = findViewById(R.id.amountTextEdit);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         submitButton = findViewById(R.id.submitButton);
-        backArrow = findViewById(R.id.backArrow);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         cancelButton = findViewById(R.id.cancelButton);
         layoutDeposit = findViewById(R.id.layoutDeposit);
@@ -74,12 +72,7 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(DepositActivity.this, GoalsDetailActivity.class);

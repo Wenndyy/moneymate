@@ -35,12 +35,10 @@ public class GoalsActivity extends AppCompatActivity implements GoalsListener {
     private FirebaseAuth mAuth;
     private String userId;
     private Toolbar toolbar;
-    private ImageView backArrow;
 
     private TextView categoryTitleText;
     private ImageView categoryIcon;
 
-    private String selectedDate;
     private EditText amountTextEdit;
     private LinearLayout submitButton,cancelButton, layoutProgress;
     private CardView layoutGoals;
@@ -62,18 +60,10 @@ public class GoalsActivity extends AppCompatActivity implements GoalsListener {
         categoryId = getIntent().getStringExtra("goalsCategory");
         amountTextEdit = findViewById(R.id.amountTextEdit);
         submitButton = findViewById(R.id.submitButton);
-        backArrow = findViewById(R.id.backArrow);
         cancelButton = findViewById(R.id.cancelButton);
         layoutGoals= findViewById(R.id.layoutGoals);
         layoutProgress = findViewById(R.id.layoutProgress);
 
-        backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(GoalsActivity.this, DashboardActivity.class);
@@ -95,7 +85,6 @@ public class GoalsActivity extends AppCompatActivity implements GoalsListener {
 
     private void submitGoals() {
         String amountStr = amountTextEdit.getText().toString();
-
         if (amountStr.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;

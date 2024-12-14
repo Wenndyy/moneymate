@@ -2,7 +2,9 @@ package com.example.moneymate.View.Budget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
@@ -43,7 +45,8 @@ public class CategoryBudgetActivity extends AppCompatActivity implements Categor
     private GridLayout categoryGrid;
     private CategoryBudgetController categoryBudgetController;
     private CardView layoutCategory;
-    private LinearLayout  layoutProgress;
+    private LinearLayout  layoutProgress,layoutCard;
+    private double screenDiagonalInches;
 
     private List<String> usedCategoryIds = new ArrayList<>();
 
@@ -71,6 +74,7 @@ public class CategoryBudgetActivity extends AppCompatActivity implements Categor
 
         layoutCategory = findViewById(R.id.layoutCategory);
         layoutProgress = findViewById(R.id.layoutProgress);
+        layoutCard = findViewById(R.id.layoutCard);
 
         nextButton = findViewById(R.id.nextButton);
         nextButton.setEnabled(false);
@@ -89,6 +93,18 @@ public class CategoryBudgetActivity extends AppCompatActivity implements Categor
 
         categoryBudgetList = new ArrayList<>();
         categoryGrid = findViewById(R.id.categoryGrid);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidthInches = displayMetrics.widthPixels / displayMetrics.xdpi;
+        float screenHeightInches = displayMetrics.heightPixels / displayMetrics.ydpi;
+        screenDiagonalInches = Math.sqrt(
+                Math.pow(screenWidthInches, 2) + Math.pow(screenHeightInches, 2)
+        );
+
+        if (screenDiagonalInches <= 6.4){
+            layoutCard.setPadding(20,20,20,20);
+            categoryGrid.setPadding(0,0,0,0);
+        }
 
         categoryBudgetController = new CategoryBudgetController();
         categoryBudgetController.setCategoryBudgetListener(this);
@@ -115,19 +131,19 @@ public class CategoryBudgetActivity extends AppCompatActivity implements Categor
             }
 
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
             params.setMargins(16, 16, 16, 16);
+
+            params.setGravity(Gravity.CENTER);
             categoryView.setLayoutParams(params);
 
 
             if (usedCategoryIds.contains(category.getIdCategoryExpense())) {
-
                 categoryView.setAlpha(0.5f);
                 categoryView.setEnabled(false);
             } else {
-
                 categoryView.setBackgroundResource(R.drawable.bg_category_icon);
                 categoryView.setAlpha(1.0f);
                 categoryView.setEnabled(true);

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.moneymate.Interface.BudgetDetailListener;
 import com.example.moneymate.Interface.BudgetListener;
 import com.example.moneymate.Interface.MessageListener;
+import com.example.moneymate.Interface.SetBudgetListener;
 import com.example.moneymate.Model.Budget;
 import com.example.moneymate.Model.CategoryBudget;
 import com.example.moneymate.Model.CategoryExpense;
@@ -29,6 +30,7 @@ public class BudgetController extends Budget{
     private BudgetDetailListener budgetDetailListener;
 
     private MessageListener messageListener;
+    private SetBudgetListener setBudgetListener;
 
 
 
@@ -63,7 +65,6 @@ public class BudgetController extends Budget{
     public void saveBudget(Budget budget) {
         budgetListener.onMessageLoading(true);
 
-        // Validasi jika budget untuk kategori sudah ada
         db.collection("Budget")
                 .whereEqualTo("idCategory", budget.getIdCategory())
                 .whereEqualTo("idUser", budget.getIdUser())
@@ -103,34 +104,15 @@ public class BudgetController extends Budget{
     }
 
     public void getBudgetDetails(String userId) {
-        budgetListener.onMessageLoading(true);
+        setBudgetListener.onMessageLoading(true);
 
-        // Tambahkan log untuk memastikan user ID
-        Log.d("BudgetController", "Fetching budgets for User ID: " + userId);
-
-        // Tambahkan log untuk melihat jumlah dokumen di koleksi Budget
-        db.collection("Budget")
-                .get()
-                .addOnSuccessListener(allBudgetsQuery -> {
-                    Log.d("BudgetController", "Total Budgets in collection: " + allBudgetsQuery.size());
-
-                    // Log semua budget untuk melihat struktur
-                    for (DocumentSnapshot doc : allBudgetsQuery.getDocuments()) {
-                        Log.d("BudgetController", "Budget Doc ID: " + doc.getId());
-                        Log.d("BudgetController", "User ID in Budget: " + doc.getString("idUser"));
-                    }
-                });
 
         db.collection("Budget")
                 .whereEqualTo("idUser", userId)
                 .get()
                 .addOnSuccessListener(budgetQuery -> {
-                    // Log jumlah budget yang ditemukan
-                    Log.d("BudgetController", "Found " + budgetQuery.size() + " budgets for user: " + userId);
-
                     if (budgetQuery.isEmpty()) {
-                        budgetListener.onMessageFailure("No budgets found for this user");
-                        budgetListener.onMessageLoading(false);
+                        setBudgetListener.onMessageLoading(false);
                         return;
                     }
 
@@ -140,11 +122,6 @@ public class BudgetController extends Budget{
                     for (DocumentSnapshot budgetDoc : budgetQuery.getDocuments()) {
                         Budget budget = budgetDoc.toObject(Budget.class);
 
-                        // Log detail setiap budget
-                        Log.d("BudgetController", "Budget ID: " + budget.getIdBudget());
-                        Log.d("BudgetController", "Category ID: " + budget.getIdCategory());
-                        Log.d("BudgetController", "Item Budget: " + budget.getItemBudget());
-
                         Task<DocumentSnapshot> categoryTask = db.collection("CategoryExpense")
                                 .document(budget.getIdCategory())
                                 .get()
@@ -153,11 +130,7 @@ public class BudgetController extends Budget{
                                         String categoryName = categoryDoc.getString("expenseCategoryName");
                                         String categoryImage = categoryDoc.getString("categoryExpenseImage");
 
-                                        Log.d("BudgetController", "Category Name: " + categoryName);
-
                                         calculateItemBudgetTotal(budget, categoryName, categoryImage, budgetDetailList);
-                                    } else {
-                                        Log.w("BudgetController", "Category not found for ID: " + budget.getIdCategory());
                                     }
                                 });
 
@@ -166,22 +139,20 @@ public class BudgetController extends Budget{
 
                     Tasks.whenAll(tasks)
                             .addOnSuccessListener(aVoid -> {
-                                budgetListener.onMessageLoading(false);
-                                budgetListener.onBudgetDetailsLoaded(budgetDetailList);
+                                setBudgetListener.onMessageLoading(false);
+                                setBudgetListener.onBudgetDetailsLoaded(budgetDetailList);
                             })
                             .addOnFailureListener(e -> {
-                                budgetListener.onMessageFailure("Error processing budgets: " + e.getMessage());
-                                budgetListener.onMessageLoading(false);
+                                setBudgetListener.onMessageLoading(false);
                             });
                 })
                 .addOnFailureListener(e -> {
-                    budgetListener.onMessageFailure("Error fetching budgets: " + e.getMessage());
-                    budgetListener.onMessageLoading(false);
+
+                    setBudgetListener.onMessageLoading(false);
                 });
     }
     private void calculateItemBudgetTotal(Budget budget, String categoryName, String categoryImage, List<Map<String, Object>> budgetDetailList) {
         if (budget.getItemBudget() == null || budget.getItemBudget().isEmpty()) {
-            Log.w("BudgetController", "No items in budget for ID: " + budget.getIdBudget());
             Map<String, Object> budgetDetail = new HashMap<>();
             budgetDetail.put("idBudget", budget.getIdBudget());
             budgetDetail.put("categoryId", budget.getIdCategory());
@@ -195,7 +166,7 @@ public class BudgetController extends Budget{
             return;
         }
 
-        // Menggunakan whereIn untuk mendapatkan semua dokumen dengan idExpense yang ada di itemBudget
+
         db.collection("Expense")
                 .whereIn("idExpense", budget.getItemBudget())
                 .whereEqualTo("idCategoryExpense", budget.getIdCategory())
@@ -209,12 +180,8 @@ public class BudgetController extends Budget{
                         Double amount = expenseDoc.getDouble("amount");
                         if (amount != null) {
                             totalAmount += amount;
-                        } else {
-                            Log.w("BudgetController", "Expense with null amount: " + expenseDoc.getId());
                         }
                     }
-
-                    // Perhitungan persentase
                     double percentage = (budget.getAmount() > 0) ? (totalAmount / budget.getAmount()) * 100 : 0;
 
                     Map<String, Object> budgetDetail = new HashMap<>();
@@ -226,16 +193,9 @@ public class BudgetController extends Budget{
                     budgetDetail.put("totalSpent", totalAmount);
                     budgetDetail.put("percentage", percentage);
 
-                    // Menambahkan detail ke daftar budget
+
                     budgetDetailList.add(budgetDetail);
-                    budgetListener.onBudgetDetailsLoaded(budgetDetailList);
-
-
-                    Log.d("BudgetController", "Budget detail added: " + budgetDetail);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("BudgetController", "Error calculating total amount", e);
-                    budgetListener.onMessageFailure("Error calculating budget totals: " + e.getMessage());
+                    setBudgetListener.onBudgetDetailsLoaded(budgetDetailList);
 
                 });
     }
@@ -451,11 +411,6 @@ public class BudgetController extends Budget{
     }
 
     public void deleteBudget(String idBudget) {
-        if (idBudget == null || idBudget.isEmpty()) {
-            budgetDetailListener.onMessageFailure("Budget ID cannot be null or empty.");
-            return;
-        }
-
         budgetDetailListener.onMessageLoading(true);
 
         db.collection("Budget")
@@ -478,5 +433,9 @@ public class BudgetController extends Budget{
 
     public void setMessageListener(MessageListener messageListener) {
         this.messageListener = messageListener;
+    }
+
+    public void setSetBudgetListener(SetBudgetListener setBudgetListener) {
+        this.setBudgetListener = setBudgetListener;
     }
 }

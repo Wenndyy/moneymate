@@ -41,12 +41,10 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
     private FirebaseAuth mAuth;
     private String userId;
     private Toolbar toolbar;
-    private ImageView backArrow;
 
     private TextView categoryTitleText;
     private ImageView categoryIcon;
 
-    private String selectedDate;
     private EditText amountTextEdit;
     private LinearLayout submitButton,cancelButton, layoutProgress;
     private CardView layoutBudget;
@@ -67,18 +65,12 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
         categoryId = getIntent().getStringExtra("budgetCategory");
         amountTextEdit = findViewById(R.id.amountTextEdit);
         submitButton = findViewById(R.id.submitButton);
-        backArrow = findViewById(R.id.backArrow);
+
         cancelButton = findViewById(R.id.cancelButton);
         layoutBudget = findViewById(R.id.layoutBudget);
         layoutProgress = findViewById(R.id.layoutProgress);
 
-        backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(BudgetActivity.this, DashboardActivity.class);
@@ -168,25 +160,6 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
         }
     }
 
-    @Override
-    public void onLoadDataExpenseSuccess(ArrayList<Budget> budgetList) {
-
-    }
-
-    @Override
-    public void onDataExpenseSuccess(Budget budget) {
-
-    }
-
-    @Override
-    public void onBudgetDataReady(List<Expense> expenses, double totalBudgetAmount, double totalItemAmount) {
-
-    }
-
-    @Override
-    public void onBudgetDetailsLoaded(List<Map<String, Object>> budgetDetails) {
-
-    }
 
     private void showMotionToast(String title, String message, MotionToastStyle style) {
         MotionToast.Companion.createColorToast(
