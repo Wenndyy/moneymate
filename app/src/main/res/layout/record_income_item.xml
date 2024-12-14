@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Category"
             android:textSize="14sp"
+            android:textColor="@color/black"
             android:fontFamily="@font/poppins_medium"
             android:layout_weight="1"/>
 

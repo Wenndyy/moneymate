@@ -39,7 +39,6 @@ public class ExpenseActivity extends AppCompatActivity implements ExpenseListene
     private FirebaseAuth mAuth;
     private String userId;
     private Toolbar toolbar;
-    private ImageView backArrow;
 
     private TextView categoryTitleText;
     private ImageView categoryIcon;
@@ -67,19 +66,12 @@ public class ExpenseActivity extends AppCompatActivity implements ExpenseListene
         amountTextEdit = findViewById(R.id.amountTextEdit);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         submitButton = findViewById(R.id.submitButton);
-        backArrow = findViewById(R.id.backArrow);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         cancelButton = findViewById(R.id.cancelButton);
         layoutExpense = findViewById(R.id.layoutExpense);
         layoutProgress = findViewById(R.id.layoutProgress);
 
-        backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(ExpenseActivity.this, DashboardActivity.class);
@@ -167,7 +159,7 @@ public class ExpenseActivity extends AppCompatActivity implements ExpenseListene
         amountTextEdit.setText("");
         dateTextEdit.setText("");
         Intent intent = new Intent(ExpenseActivity.this, RecordExpenseActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -188,15 +180,7 @@ public class ExpenseActivity extends AppCompatActivity implements ExpenseListene
         }
     }
 
-    @Override
-    public void onLoadDataExpenseSuccess(ArrayList<Expense> expenseList) {
 
-    }
-
-    @Override
-    public void onDataExpenseSuccess(Expense expense) {
-
-    }
 
     private void showMotionToast(String title, String message, MotionToastStyle style) {
         MotionToast.Companion.createColorToast(

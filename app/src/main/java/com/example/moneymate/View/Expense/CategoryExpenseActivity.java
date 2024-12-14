@@ -2,6 +2,8 @@ package com.example.moneymate.View.Expense;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
@@ -37,7 +39,8 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
     private GridLayout categoryGrid;
     private CategoryExpenseController categoryExpenseController;
     private CardView layoutCategory;
-    private LinearLayout  layoutProgress;
+    private LinearLayout  layoutProgress, layoutCard;
+    private double screenDiagonalInches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
 
         layoutCategory = findViewById(R.id.layoutCategory);
         layoutProgress = findViewById(R.id.layoutProgress);
+        layoutCard = findViewById(R.id.layoutCard);
 
         nextButton = findViewById(R.id.nextButton);
         nextButton.setEnabled(false);
@@ -83,6 +87,18 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
 
         categoryExpenseList = new ArrayList<>();
         categoryGrid = findViewById(R.id.categoryGrid);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidthInches = displayMetrics.widthPixels / displayMetrics.xdpi;
+        float screenHeightInches = displayMetrics.heightPixels / displayMetrics.ydpi;
+        screenDiagonalInches = Math.sqrt(
+                Math.pow(screenWidthInches, 2) + Math.pow(screenHeightInches, 2)
+        );
+
+        if (screenDiagonalInches <= 6.4){
+            layoutCard.setPadding(20,20,20,20);
+            categoryGrid.setPadding(0,0,0,0);
+        }
 
         categoryExpenseController = new CategoryExpenseController("", "", "", new Date(), new Date());
         categoryExpenseController.setCategoryExpenseListener(CategoryExpenseActivity.this);
@@ -108,11 +124,14 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
 
                 categoryIcon.setImageResource(R.drawable.ic_default);
             }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
             params.setMargins(16, 16, 16, 16);
+
+            params.setGravity(Gravity.CENTER);
             categoryView.setLayoutParams(params);
+
             categoryView.setOnClickListener(v -> {
                 expenseCategory = category.getIdCategoryExpense();
                 selectCategory((LinearLayout) categoryView, category.getIdCategoryExpense());

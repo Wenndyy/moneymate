@@ -19,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.moneymate.Controller.IncomeController;
 import com.example.moneymate.Interface.IncomeListener;
+import com.example.moneymate.Interface.RecordIncomeListener;
 import com.example.moneymate.Model.CategoryIncome;
 import com.example.moneymate.R;
 import com.example.moneymate.Model.Income;
@@ -37,14 +38,11 @@ import java.util.Map;
 import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
 
-public class RecordIncomeActivity extends AppCompatActivity implements IncomeListener {
+public class RecordIncomeActivity extends AppCompatActivity implements RecordIncomeListener {
     private Toolbar toolbar;
     private ImageView backArrow;
     private LinearLayout recordLayout;
-
     private FirebaseFirestore db;
-
-
     private ProgressBar progressBar;
     private TextView noValue;
 
@@ -60,10 +58,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-
         db = FirebaseFirestore.getInstance();
-
-
         progressBar = findViewById(R.id.progressBar);
         backArrow = findViewById(R.id.backArrow);
         backArrow.setOnClickListener(v -> {
@@ -72,19 +67,15 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
 
         recordLayout = findViewById(R.id.recordLayout);
         noValue = findViewById(R.id.noValue);
-
         progressBar.setVisibility(View.VISIBLE);
         recordLayout.setVisibility(View.GONE);
         noValue.setVisibility(View.GONE);
 
-
         IncomeController incomeController = new IncomeController("","","",0.0,new Date(),new Date(),new Date());
-        incomeController.setIncomeListener(RecordIncomeActivity.this);
+        incomeController.setRecordIncomeListener(RecordIncomeActivity.this);
         incomeController.loadIncomeDataByUser();
+
     }
-
-
-
 
     private void displayGroupedIncome(Map<String, ArrayList<Income>> groupedData) {
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -93,18 +84,15 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
             String date = entry.getKey();
             ArrayList<Income> incomeList = entry.getValue();
 
-
             View dateView = inflater.inflate(R.layout.record_date_layout, null);
             TextView dateText = dateView.findViewById(R.id.dateText);
             dateText.setText(date);
-
 
             LinearLayout dateLayout = new LinearLayout(this);
             dateLayout.setOrientation(LinearLayout.VERTICAL);
             dateLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_item_record));
 
             dateLayout.addView(dateView);
-
 
             for (int i = 0; i < incomeList.size(); i++) {
                 Income income = incomeList.get(i);
@@ -113,32 +101,39 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
                 TextView incomeType = incomeView.findViewById(R.id.incomeType);
                 TextView incomeAmount = incomeView.findViewById(R.id.incomeAmount);
                 ImageView categoryIcon = incomeView.findViewById(R.id.categoryIcon);
+                View divider = incomeView.findViewById(R.id.garis);
 
                 getIncomeCategory(income.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, income);
                 incomeView.setOnClickListener(v -> showIncomeDialog(income));
 
-                dateLayout.addView(incomeView);
-
-                // Hanya tambahkan divider jika bukan item terakhir
                 if (i < incomeList.size() - 1) {
-                    View view  = incomeView.findViewById(R.id.garis);
-                    view.setVisibility(View.VISIBLE);
+                    divider.setVisibility(View.VISIBLE);
+                } else {
+                    divider.setVisibility(View.GONE);
+                    incomeView.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_item_record_last));
+                    incomeView.setPadding(
+                            incomeView.getPaddingLeft(),
+                            incomeView.getPaddingTop(),
+                            incomeView.getPaddingRight(),
+                            incomeView.getPaddingBottom()
+                    );
                 }
+
+
+                dateLayout.addView(incomeView);
             }
 
-
-
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(0, 10, 0, 16);
 
             dateLayout.setLayoutParams(layoutParams);
             recordLayout.addView(dateLayout);
+
+
         }
     }
-
-
-
     private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
         db.collection("CategoryIncome")
                 .document(categoryId)
@@ -223,7 +218,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
 
             btnOk.setOnClickListener(view -> {
                 IncomeController incomeController = new IncomeController(income.getIdIncome(),income.getIdCategoryIncome(),income.getIdUser(),income.getAmount(),income.getDateOfIncome(),income.getCreated_at(),income.getUpdated_at());
-                incomeController.setIncomeListener(RecordIncomeActivity.this);
+                incomeController.setRecordIncomeListener(RecordIncomeActivity.this);
                 incomeController.deleteIncome(income);
                 confirmationDialog.dismiss();
                 dialog.dismiss();
@@ -253,19 +248,9 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        formatRupiah.setMaximumFractionDigits(0);
+        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
-    }
-
-
-
-    @Override
-    public void onGetIncomeSuccess(CategoryIncome category) {
-
-    }
-
-    @Override
-    public void onMessageSuccess(String message) {
-
     }
 
     @Override
@@ -287,21 +272,21 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
 
     @Override
     public void onLoadDataIncomeSuccess(ArrayList<Income> incomeList) {
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+
+        SimpleDateFormat sortDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         if (incomeList.isEmpty()) {
             noValue.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-
-            Collections.sort(incomeList, (income1, income2) -> income2.getDateOfIncome().compareTo(income1.getDateOfIncome()));
-
+            Collections.sort(incomeList, (income1, income2) -> {
+                return sortDateFormat.format(income2.getDateOfIncome()).compareTo(sortDateFormat.format(income1.getDateOfIncome()));
+            });
 
             Map<String, ArrayList<Income>> groupedData = new HashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd");
-
             for (Income income : incomeList) {
-                Date dateOfIncome = income.getDateOfIncome();
-                String formattedDate = sdf.format(dateOfIncome);
+                String formattedDate = displayDateFormat.format(income.getDateOfIncome());
 
                 if (!groupedData.containsKey(formattedDate)) {
                     groupedData.put(formattedDate, new ArrayList<>());
@@ -309,7 +294,9 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
                 groupedData.get(formattedDate).add(income);
             }
 
+
             displayGroupedIncome(groupedData);
+
             progressBar.setVisibility(View.GONE);
             recordLayout.setVisibility(View.VISIBLE);
         }
@@ -320,7 +307,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements IncomeLis
         showMotionToast("Record Income","Income successfully deleted!", MotionToastStyle.SUCCESS);
         recordLayout.removeAllViews();
         IncomeController incomeController = new IncomeController(income.getIdIncome(),income.getIdCategoryIncome(),income.getIdUser(),income.getAmount(),income.getDateOfIncome(),income.getCreated_at(),income.getUpdated_at());
-        incomeController.setIncomeListener(RecordIncomeActivity.this);
+        incomeController.setRecordIncomeListener(RecordIncomeActivity.this);
         incomeController.loadIncomeDataByUser();
     }
 

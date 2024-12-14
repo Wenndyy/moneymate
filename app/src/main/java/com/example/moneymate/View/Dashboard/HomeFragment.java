@@ -214,45 +214,6 @@ public class HomeFragment extends Fragment implements DashboardListener {
             progressBar.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onLoadLastExpenseSuccess(Expense lastExpense, List<Expense> expenseList) {
-        if (lastExpense != null) {
-
-            noValueExpense.setVisibility(View.GONE);
-            recordExpenseLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-
-
-            View lastIncomeView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
-
-            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
-            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
-            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
-
-            // Mengambil kategori income dan menampilkan
-            getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
-
-            // Urutkan income berdasarkan tanggal terbaru
-            Collections.sort(expenseList, (expense1, expense2) -> {
-                if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
-                    return 0; // Jangan urutkan jika salah satu tanggal null
-                }
-                return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
-            });
-
-            // Menampilkan hanya income yang berada di tanggal terbaru
-            displayLatestExpense(expenseList);
-
-        } else {
-            // Jika tidak ada data
-            noValueExpense.setVisibility(View.VISIBLE);
-            recordExpenseLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
     private void displayLatestIncome(List<Income> incomeList) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
@@ -263,7 +224,6 @@ public class HomeFragment extends Fragment implements DashboardListener {
             List<Income> latestIncomeList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-            // Filter income berdasarkan tanggal yang sama dengan tanggal terbaru
             for (Income income : incomeList) {
                 String incomeDate = sdf.format(income.getDateOfIncome());
                 String latestIncomeDate = sdf.format(latestDate);
@@ -276,23 +236,17 @@ public class HomeFragment extends Fragment implements DashboardListener {
             recordIncomeLayout.removeAllViews();
 
             if (!latestIncomeList.isEmpty()) {
-                // Menampilkan tanggal
                 SimpleDateFormat sdf2 = new SimpleDateFormat("E, MM/dd");
                 View dateView = inflater.inflate(R.layout.record_date_layout, null);
                 TextView dateText = dateView.findViewById(R.id.dateText);
                 dateText.setText(sdf2.format(latestDate));
 
-                // Layout untuk income berdasarkan tanggal terbaru
                 LinearLayout dateLayout = new LinearLayout(getContext());
                 dateLayout.setOrientation(LinearLayout.VERTICAL);
                 dateLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_item_record));
 
-                dateLayout.addView(dateView); // Menambahkan tampilan tanggal
-
-                // Batasi hanya 4 item terbaru yang ditampilkan
-                int itemCount = Math.min(latestIncomeList.size(), 4);  // Menampilkan maksimal 4 item
-
-                // Menampilkan income berdasarkan tanggal terbaru
+                dateLayout.addView(dateView);
+                int itemCount = Math.min(latestIncomeList.size(), 4);
                 for (int i = 0; i < itemCount; i++) {
                     Income income = latestIncomeList.get(i);
 
@@ -301,20 +255,14 @@ public class HomeFragment extends Fragment implements DashboardListener {
                     TextView incomeAmount = incomeView.findViewById(R.id.incomeAmount);
                     ImageView categoryIcon = incomeView.findViewById(R.id.categoryIcon);
 
-                    // Menampilkan kategori income
                     getIncomeCategory(income.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, income);
 
-                    // Menambahkan income ke dalam layout
                     dateLayout.addView(incomeView);
-
-                    // Tambahkan garis pembatas antar item
                     View view = incomeView.findViewById(R.id.garis);
                     view.setVisibility(View.VISIBLE);
                 }
 
                 addShowMoreTextView(dateLayout);
-
-                // Menambahkan layout dateLayout ke layout utama
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 10, 0, 16);
@@ -323,171 +271,76 @@ public class HomeFragment extends Fragment implements DashboardListener {
             }
         }
     }
-
-
-    private void displayLatestExpense(List<Expense> expenseList) {
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-
-        if (!expenseList.isEmpty()) {
-
-            Date latestDate = expenseList.get(0).getDateOfExpense();
-
-            List<Expense> latestExpenseList = new ArrayList<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-            // Filter income berdasarkan tanggal yang sama dengan tanggal terbaru
-            for (Expense expense : expenseList) {
-                String expenseDate = sdf.format(expense.getDateOfExpense());
-                String latestExpenseDate = sdf.format(latestDate);
-
-                if (expenseDate.equals(latestExpenseDate)) {
-                    latestExpenseList.add(expense);
-                }
-            }
-
-            recordExpenseLayout.removeAllViews();
-
-            if (!latestExpenseList.isEmpty()) {
-                // Menampilkan tanggal
-                SimpleDateFormat sdf2 = new SimpleDateFormat("E, MM/dd");
-                View dateView = inflater.inflate(R.layout.record_date_layout, null);
-                TextView dateText = dateView.findViewById(R.id.dateText);
-                dateText.setText(sdf2.format(latestDate));
-
-                // Layout untuk income berdasarkan tanggal terbaru
-                LinearLayout dateLayout = new LinearLayout(getContext());
-                dateLayout.setOrientation(LinearLayout.VERTICAL);
-                dateLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_item_record));
-
-                dateLayout.addView(dateView); // Menambahkan tampilan tanggal
-
-                // Batasi hanya 4 item terbaru yang ditampilkan
-                int itemCount = Math.min(latestExpenseList.size(), 4);  // Menampilkan maksimal 4 item
-
-                // Menampilkan income berdasarkan tanggal terbaru
-                for (int i = 0; i < itemCount; i++) {
-                    Expense expense = latestExpenseList.get(i);
-
-                    View expenseView = inflater.inflate(R.layout.record_expense_item, null);
-                    TextView expenseType = expenseView.findViewById(R.id.incomeType);
-                    TextView expenseAmount = expenseView.findViewById(R.id.incomeAmount);
-                    ImageView categoryIcon = expenseView.findViewById(R.id.categoryIcon);
-
-                    // Menampilkan kategori income
-                    getExpenseCategory(expense.getIdCategoryExpense(), expenseType, expenseAmount, categoryIcon, expense);
-
-                    // Menambahkan income ke dalam layout
-                    dateLayout.addView(expenseView);
-
-                    // Tambahkan garis pembatas antar item
-                    View view = expenseView.findViewById(R.id.garis);
-                    view.setVisibility(View.VISIBLE);
-                }
-
-                addShowMoreTextViewExpense(dateLayout);
-
-                // Menambahkan layout dateLayout ke layout utama
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 10, 0, 16);
-                dateLayout.setLayoutParams(layoutParams);
-                recordExpenseLayout.addView(dateLayout);
-            }
-        }
-    }
-    private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
-        db.collection("CategoryIncome")
-                .document(categoryId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String categoryName = document.getString("incomeCategoryName");
-                            String iconName = document.getString("categoryIncomeImage");
-
-                            // Set nama kategori
-                            incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
-
-                            // Set icon kategori
-                            if (iconName != null && !iconName.isEmpty()) {
-                                int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
-
-                                if (iconResId != 0) {
-                                    categoryIcon.setImageResource(iconResId);
-                                } else {
-                                    Log.w("getIncomeCategory", "Icon not found for " + iconName);
-                                    categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
-                                }
-                            } else {
-                                categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
-                            }
-
-                            // Set jumlah income
-                            incomeAmount.setText(formatRupiah(income.getAmount()));
-                        } else {
-                            Log.d("getIncomeCategory", "No such category found!");
-                            setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
-                        }
-                    } else {
-                        Log.d("getIncomeCategory", "Error getting category", task.getException());
-                        setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
-                    }
-                });
-    }
-
-    private void getExpenseCategory(String categoryId, TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
-        db.collection("CategoryExpense")
-                .document(categoryId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String categoryName = document.getString("expenseCategoryName");
-                            String iconName = document.getString("categoryExpenseImage");
-
-                            // Set nama kategori
-                            expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
-
-                            // Set icon kategori
-                            if (iconName != null && !iconName.isEmpty()) {
-                                int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
-
-                                if (iconResId != 0) {
-                                    categoryIcon.setImageResource(iconResId);
-                                } else {
-                                    Log.w("getIncomeCategory", "Icon not found for " + iconName);
-                                    categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
-                                }
-                            } else {
-                                categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
-                            }
-
-                            // Set jumlah income
-                            expenseAmount.setText(formatRupiah(expense.getAmount()));
-                        } else {
-                            Log.d("getIncomeCategory", "No such category found!");
-                            setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
-                        }
-                    } else {
-                        Log.d("getIncomeCategory", "Error getting category", task.getException());
-                        setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
-                    }
-                });
-    }
-
     private void setDefaultCategory(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
         incomeType.setText("Unknown Category");
         incomeAmount.setText(formatRupiah(income.getAmount()));
         categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
     }
+    private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
+        if (getContext() != null) {  // Check if fragment is attached
+            db.collection("CategoryIncome")
+                    .document(categoryId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String categoryName = document.getString("incomeCategoryName");
+                                String iconName = document.getString("categoryIncomeImage");
+                                incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                if (iconName != null && !iconName.isEmpty()) {
+                                    int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                    if (iconResId != 0) {
+                                        categoryIcon.setImageResource(iconResId);
+                                    } else {
+                                        categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                    }
+                                } else {
+                                    categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                }
+                                incomeAmount.setText(formatRupiah(income.getAmount()));
+                            } else {
+                                Log.d("getIncomeCategory", "No such category found!");
+                                setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
+                            }
+                        } else {
+                            Log.d("getIncomeCategory", "Error getting category", task.getException());
+                            setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onLoadLastExpenseSuccess(Expense lastExpense, List<Expense> expenseList) {
+        if (lastExpense != null) {
+            noValueExpense.setVisibility(View.GONE);
+            recordExpenseLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
 
 
-    private void setDefaultCategoryExpense(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Expense expense) {
-        incomeType.setText("Unknown Category");
-        incomeAmount.setText(formatRupiah(expense.getAmount()));
-        categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+            View lastIncomeView = LayoutInflater.from(getActivity())
+                    .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
+
+            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
+            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
+            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
+
+            getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
+            Collections.sort(expenseList, (expense1, expense2) -> {
+                if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
+                    return 0;
+                }
+                return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
+            });
+            displayLatestExpense(expenseList);
+
+        } else {
+
+            noValueExpense.setVisibility(View.VISIBLE);
+            recordExpenseLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     private void addShowMoreTextView(LinearLayout dateLayout) {
@@ -513,6 +366,97 @@ public class HomeFragment extends Fragment implements DashboardListener {
         });
 
         dateLayout.addView(showMoreText);
+    }
+
+    private void getExpenseCategory(String categoryId, TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
+        if (getContext() != null) {
+            db.collection("CategoryExpense")
+                    .document(categoryId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String categoryName = document.getString("expenseCategoryName");
+                                String iconName = document.getString("categoryExpenseImage");
+                                expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                if (iconName != null && !iconName.isEmpty()) {
+                                    int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                    if (iconResId != 0) {
+                                        categoryIcon.setImageResource(iconResId);
+                                    } else {
+                                        categoryIcon.setImageResource(R.drawable.ic_default);
+                                    }
+                                } else {
+                                    categoryIcon.setImageResource(R.drawable.ic_default);
+                                }
+                                expenseAmount.setText(formatRupiah(expense.getAmount()));
+                            } else {
+                                Log.d("getExpenseCategory", "No such category found!");
+                                setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
+                            }
+                        } else {
+                            Log.d("getExpenseCategory", "Error getting category", task.getException());
+                            setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
+                        }
+                    });
+        }
+    }
+
+    private void displayLatestExpense(List<Expense> expenseList) {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        if (!expenseList.isEmpty()) {
+            Date latestDate = expenseList.get(0).getDateOfExpense();
+            List<Expense> latestExpenseList = new ArrayList<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            for (Expense expense : expenseList) {
+                String expenseDate = sdf.format(expense.getDateOfExpense());
+                String latestExpenseDate = sdf.format(latestDate);
+
+                if (expenseDate.equals(latestExpenseDate)) {
+                    latestExpenseList.add(expense);
+                }
+            }
+
+            recordExpenseLayout.removeAllViews();
+            if (!latestExpenseList.isEmpty()) {
+                SimpleDateFormat sdf2 = new SimpleDateFormat("E, MM/dd");
+                View dateView = inflater.inflate(R.layout.record_date_layout, null);
+                TextView dateText = dateView.findViewById(R.id.dateText);
+                dateText.setText(sdf2.format(latestDate));
+
+                LinearLayout dateLayout = new LinearLayout(getContext());
+                dateLayout.setOrientation(LinearLayout.VERTICAL);
+                dateLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_item_record));
+                dateLayout.addView(dateView);
+                int itemCount = Math.min(latestExpenseList.size(), 4);
+                for (int i = 0; i < itemCount; i++) {
+                    Expense expense = latestExpenseList.get(i);
+
+                    View expenseView = inflater.inflate(R.layout.record_expense_item, null);
+                    TextView expenseType = expenseView.findViewById(R.id.incomeType);
+                    TextView expenseAmount = expenseView.findViewById(R.id.incomeAmount);
+                    ImageView categoryIcon = expenseView.findViewById(R.id.categoryIcon);
+                    getExpenseCategory(expense.getIdCategoryExpense(), expenseType, expenseAmount, categoryIcon, expense);
+                    dateLayout.addView(expenseView);
+
+                    View view = expenseView.findViewById(R.id.garis);
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                addShowMoreTextViewExpense(dateLayout);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(0, 10, 0, 16);
+                dateLayout.setLayoutParams(layoutParams);
+                recordExpenseLayout.addView(dateLayout);
+            }
+        }
+    }
+    private void setDefaultCategoryExpense(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Expense expense) {
+        incomeType.setText("Unknown Category");
+        incomeAmount.setText(formatRupiah(expense.getAmount()));
+        categoryIcon.setImageResource(R.drawable.ic_default);
     }
 
     private void addShowMoreTextViewExpense(LinearLayout dateLayout) {

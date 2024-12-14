@@ -3,6 +3,8 @@ package com.example.moneymate.Controller;
 import android.util.Log;
 
 import com.example.moneymate.Interface.ExpenseListener;
+import com.example.moneymate.Interface.RecordExpenseListener;
+import com.example.moneymate.Interface.UpdateExpenseListener;
 import com.example.moneymate.Model.Budget;
 import com.example.moneymate.Model.CategoryExpense;
 import com.example.moneymate.Model.Expense;
@@ -16,6 +18,8 @@ import java.util.Date;
 
 public class ExpenseController extends Expense {
     private ExpenseListener expenseListener;
+    private RecordExpenseListener recordExpenseListener;
+    private UpdateExpenseListener updateExpenseListener;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     public ExpenseController(String idExpense, String idCategoryExpense, String idUser, double amount, Date dateOfExpense, Date created_at, Date updated_at) {
@@ -115,6 +119,7 @@ public class ExpenseController extends Expense {
     }
 
     public void loadExpenseDataByUser() {
+        recordExpenseListener.onMessageLoading(true);
         String userId = mAuth.getCurrentUser().getUid();
         db.collection("Expense")
                 .whereEqualTo("idUser", userId)
@@ -129,42 +134,39 @@ public class ExpenseController extends Expense {
 
 
                         if (expenseList != null) {
-                            expenseListener.onLoadDataExpenseSuccess(expenseList);
+                            recordExpenseListener.onLoadDataExpenseSuccess(expenseList);
                         } else {
 
-                            expenseListener.onMessageFailure("Empty Data");
+                            recordExpenseListener.onMessageFailure("Empty Data");
                         }
                     } else {
-                        expenseListener.onMessageFailure("Failed to get data");
+                        recordExpenseListener.onMessageFailure("Failed to get data");
                     }
+                    recordExpenseListener.onMessageLoading(false);
+                }).addOnFailureListener(e -> {
+                    recordExpenseListener.onMessageLoading(false);
                 });
     }
 
     public void deleteExpense(Expense expense) {
-        expenseListener.onMessageLoading(true);
-
-        // Hapus expense dari koleksi Expense
+        recordExpenseListener.onMessageLoading(true);
         db.collection("Expense").document(expense.getIdExpense()).delete()
                 .addOnSuccessListener(aVoid -> {
-                    expenseListener.onDataExpenseSuccess(expense);
+                    recordExpenseListener.onDataExpenseSuccess(expense);
 
-                    // Setelah expense dihapus, perbarui itemBudget pada budget terkait
                     removeExpenseFromBudget(expense);
 
-                    expenseListener.onMessageLoading(false);
+                    recordExpenseListener.onMessageLoading(false);
                 })
                 .addOnFailureListener(e -> {
-                    expenseListener.onMessageFailure("Failed to delete expense!");
-                    expenseListener.onMessageLoading(false);
+                    recordExpenseListener.onMessageFailure("Failed to delete expense!");
+                    recordExpenseListener.onMessageLoading(false);
                 });
     }
 
 
     private void removeExpenseFromBudget(Expense expense) {
-
         String categoryId = expense.getIdCategoryExpense();
-
-
         db.collection("Budget")
                 .whereEqualTo("idCategory", categoryId)
                 .whereEqualTo("idUser", expense.getIdUser())
@@ -203,38 +205,68 @@ public class ExpenseController extends Expense {
 
 
     public void loadExpenseByIdExpense(String expenseId) {
-
+        updateExpenseListener.onMessageLoading(true);
         db.collection("Expense").whereEqualTo("idExpense", expenseId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Expense expense = document.toObject(Expense.class);
-                            expenseListener.onDataExpenseSuccess(expense);
+                            updateExpenseListener.onDataExpenseSuccess(expense);
                         }
-                        expenseListener.onMessageLoading(false);
+                        updateExpenseListener.onMessageLoading(false);
                     } else {
                         Log.e("ExpenseController", "Error getting expense", task.getException());
-                        expenseListener.onMessageFailure("Error getting expense");
-                        expenseListener.onMessageLoading(false);
+                        updateExpenseListener.onMessageFailure("Error getting expense");
+                        updateExpenseListener.onMessageLoading(false);
                     }
                 });
     }
     public void updateExpense(Expense expense) {
-        expenseListener.onMessageLoading(true);
+        updateExpenseListener.onMessageLoading(true);
         db.collection("Expense").document(expense.getIdExpense())
                 .set(expense)
                 .addOnSuccessListener(aVoid -> {
-                    expenseListener.onMessageSuccess("Updated Success!");
-                    expenseListener.onMessageLoading(false);
+                    updateExpenseListener.onMessageSuccess("Updated Success!");
+                    updateExpenseListener.onMessageLoading(false);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("ExpenseController", "Error updating expense", e);
-                    expenseListener.onMessageFailure("Error getting expense");
-                    expenseListener.onMessageLoading(false);
+                    updateExpenseListener.onMessageFailure("Error getting expense");
+                    updateExpenseListener.onMessageLoading(false);
+                });
+    }
+
+    public void getCategoryDataByIdForUpdate(String categoryId) {
+        updateExpenseListener.onMessageLoading(true);
+        db.collection("CategoryExpense").document(categoryId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            CategoryExpense category = document.toObject(CategoryExpense.class);
+                            if (category != null) {
+                                updateExpenseListener.onGetExpenseSuccess(category);
+                            }
+                        }
+                    } else {
+                        updateExpenseListener.onMessageFailure("Error getting category");
+                        Log.w("ExpenseActivity", "Error getting category", task.getException());
+                    }
+                    updateExpenseListener.onMessageLoading(false);
+                }).addOnFailureListener(e -> {
+                    updateExpenseListener.onMessageLoading(false);
                 });
     }
     public void setExpenseListener(ExpenseListener expenseListener) {
         this.expenseListener = expenseListener;
+    }
+
+    public void setRecordExpenseListener(RecordExpenseListener recordExpenseListener) {
+        this.recordExpenseListener = recordExpenseListener;
+    }
+
+    public void setUpdateExpenseListener(UpdateExpenseListener updateExpenseListener) {
+        this.updateExpenseListener = updateExpenseListener;
     }
 }

@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.moneymate.Controller.ExpenseController;
 import com.example.moneymate.Interface.ExpenseListener;
+import com.example.moneymate.Interface.RecordExpenseListener;
 import com.example.moneymate.Model.CategoryExpense;
 import com.example.moneymate.Model.Expense;
 import com.example.moneymate.R;
@@ -37,7 +38,7 @@ import java.util.Map;
 import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
 
-public class RecordExpenseActivity extends AppCompatActivity implements ExpenseListener {
+public class RecordExpenseActivity extends AppCompatActivity implements RecordExpenseListener {
     private Toolbar toolbar;
     private ImageView backArrow;
     private LinearLayout recordLayout;
@@ -79,7 +80,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
         noValue.setVisibility(View.GONE);
 
         ExpenseController expenseController = new ExpenseController("","","",0.0,new Date(),new Date(),new Date());
-        expenseController.setExpenseListener(RecordExpenseActivity.this);
+        expenseController.setRecordExpenseListener(RecordExpenseActivity.this);
         expenseController.loadExpenseDataByUser();
     }
 
@@ -110,6 +111,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
                 TextView expenseType = expenseView.findViewById(R.id.incomeType);
                 TextView expenseAmount = expenseView.findViewById(R.id.incomeAmount);
                 ImageView categoryIcon = expenseView.findViewById(R.id.categoryIcon);
+                View divider = expenseView.findViewById(R.id.garis);
 
                 getExpenseCategory(expense.getIdCategoryExpense(), expenseType, expenseAmount, categoryIcon, expense);
                 expenseView.setOnClickListener(v -> showExpenseDialog(expense));
@@ -118,12 +120,16 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
 
 
                 if (i < expenseList.size() - 1) {
-                    View divider = new View(this);
-                    LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                    divider.setLayoutParams(dividerParams);
-                    divider.setBackgroundColor(ContextCompat.getColor(this, R.color.grey)); // or any color you prefer
-                    dateLayout.addView(divider);
+                    divider.setVisibility(View.VISIBLE);
+                }else{
+                    divider.setVisibility(View.GONE);
+                    expenseView.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_item_record_last));
+                    expenseView.setPadding(
+                            expenseView.getPaddingLeft(),
+                            expenseView.getPaddingTop(),
+                            expenseView.getPaddingRight(),
+                            expenseView.getPaddingBottom()
+                    );
                 }
             }
 
@@ -223,7 +229,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
 
             btnOk.setOnClickListener(view -> {
                 ExpenseController  expenseController = new ExpenseController(expense.getIdExpense(),expense.getIdCategoryExpense(),expense.getIdUser(),expense.getAmount(),expense.getDateOfExpense(),expense.getCreated_at(),expense.getUpdated_at());
-                expenseController.setExpenseListener(RecordExpenseActivity.this);
+                expenseController.setRecordExpenseListener(RecordExpenseActivity.this);
                 expenseController.deleteExpense(expense);
                 confirmationDialog.dismiss();
                 dialog.dismiss();
@@ -253,17 +259,9 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        formatRupiah.setMaximumFractionDigits(0);
+        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
-    }
-
-    @Override
-    public void onGetExpenseSuccess(CategoryExpense category) {
-
-    }
-
-    @Override
-    public void onMessageSuccess(String message) {
-
     }
 
     @Override
@@ -285,22 +283,21 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
 
     @Override
     public void onLoadDataExpenseSuccess(ArrayList<Expense> expenseList) {
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+
+        SimpleDateFormat sortDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         if (expenseList.isEmpty()) {
             noValue.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-
-            Collections.sort(expenseList, (income1, income2) -> income2.getDateOfExpense().compareTo(income1.getDateOfExpense()));
-
+            Collections.sort(expenseList, (expense1, expense2) ->{
+                return sortDateFormat.format(expense2.getDateOfExpense()).compareTo(sortDateFormat.format(expense2.getDateOfExpense()));
+            });
 
             Map<String, ArrayList<Expense>> groupedData = new HashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd");
-
             for (Expense expense : expenseList) {
-                Date dateOfExpense = expense.getDateOfExpense();
-                String formattedDate = sdf.format(dateOfExpense);
-
+                String formattedDate = displayDateFormat.format(expense.getDateOfExpense());
                 if (!groupedData.containsKey(formattedDate)) {
                     groupedData.put(formattedDate, new ArrayList<>());
                 }
@@ -318,7 +315,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements ExpenseL
         showMotionToast("Record Expense","Expense successfully deleted!", MotionToastStyle.SUCCESS);
         recordLayout.removeAllViews();
         ExpenseController expenseController = new ExpenseController(expense.getIdExpense(),expense.getIdCategoryExpense(),expense.getIdUser(),expense.getAmount(),expense.getDateOfExpense(),expense.getCreated_at(),expense.getUpdated_at());
-        expenseController.setExpenseListener(RecordExpenseActivity.this);
+        expenseController.setRecordExpenseListener(RecordExpenseActivity.this);
         expenseController.loadExpenseDataByUser();
     }
 

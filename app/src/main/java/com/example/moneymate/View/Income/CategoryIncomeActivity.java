@@ -98,9 +98,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
 
         if (screenDiagonalInches <= 6.4){
             layoutCard.setPadding(20,20,20,20);
-        }else{
-            layoutCard.setPadding(24,24,24,24);
-            categoryGrid.setPadding(20,20,20,2);
+            categoryGrid.setPadding(0,0,0,0);
         }
 
 
@@ -145,26 +143,22 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
             if (imageResId != 0) {
                 categoryIcon.setImageResource(imageResId);
             } else {
-
                 categoryIcon.setImageResource(R.drawable.ic_default);
             }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
             params.setMargins(16, 16, 16, 16);
 
-
-
-
+            params.setGravity(Gravity.CENTER);
             categoryView.setLayoutParams(params);
-
 
             categoryView.setOnClickListener(v -> {
                 incomeCategory = category.getIdCategoryIncome();
                 selectCategory((LinearLayout) categoryView, category.getIdCategoryIncome());
                 nextButton.setEnabled(true);
             });
+
 
 
             categoryGrid.addView(categoryView);

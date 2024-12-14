@@ -3,6 +3,7 @@ package com.example.moneymate.View.Expense;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.moneymate.Controller.ExpenseController;
 import com.example.moneymate.Interface.ExpenseListener;
+import com.example.moneymate.Interface.UpdateExpenseListener;
 import com.example.moneymate.Model.CategoryExpense;
 import com.example.moneymate.Model.Expense;
 import com.example.moneymate.Model.Income;
@@ -35,7 +37,7 @@ import java.util.Locale;
 import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
 
-public class UpdateExpenseActivity extends AppCompatActivity implements ExpenseListener {
+public class UpdateExpenseActivity extends AppCompatActivity implements UpdateExpenseListener {
     private LinearLayout btnCancel, submitButton;
     private EditText amountTextEdit;
     private EditText dateTextEdit;
@@ -78,14 +80,12 @@ public class UpdateExpenseActivity extends AppCompatActivity implements ExpenseL
         img_category = findViewById(R.id.img_category);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         dateTextEdit.setOnClickListener(v -> showDatePickerDialog());
-       ExpenseController expenseController = new ExpenseController("","","",0.0,new Date(),new Date(),new Date());
+        ExpenseController expenseController = new ExpenseController("","","",0.0,new Date(),new Date(),new Date());
 
-        expenseController.setExpenseListener(UpdateExpenseActivity.this);
+        expenseController.setUpdateExpenseListener(UpdateExpenseActivity.this);
         expenseController.loadExpenseByIdExpense(expenseId);
-        expenseController.getCategoryDataById(expenseCategoryId);
-        amountTextEdit.setOnClickListener(v -> {
-            amountTextEdit.setText("");
-        });
+        expenseController.getCategoryDataByIdForUpdate(expenseCategoryId);
+
 
 
         userId = mAuth.getCurrentUser().getUid();
@@ -93,35 +93,87 @@ public class UpdateExpenseActivity extends AppCompatActivity implements ExpenseL
             String amountString = amountTextEdit.getText().toString().trim();
             String dateString = dateTextEdit.getText().toString().trim();
 
-            if (amountString.isEmpty() || dateString.isEmpty()) {
-                Toast.makeText(UpdateExpenseActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            } else {
+            try {
+                Log.d("UpdateExpense", "Original Amount String: " + amountString);
+                Log.d("UpdateExpense", "Original Date String: " + dateString);
+
+                String cleanedAmountString = amountString.replaceAll("[^\\d.]", "").trim();
+                Log.d("UpdateExpense", "Cleaned Amount String: " + cleanedAmountString);
+                double amount;
                 try {
-                    String cleanedAmountString = amountString.replace("Rp", "").replace(",", "").trim();
-
-
-                    double amount = Double.parseDouble(cleanedAmountString);
-                    String[] dateParts = selectedDate.split("/");
-                    int year = Integer.parseInt(dateParts[0]);
-                    int month = Integer.parseInt(dateParts[1]) - 1;
-                    int day = Integer.parseInt(dateParts[2]);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    Date selectedDateObj = calendar.getTime();
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
-                    Date expenseDate = sdf.parse(expenseDateString);
-
-                    Expense expense = new Expense(expenseId,expenseCategoryId,userId, amount, selectedDateObj, expenseDate, new Date());
-                    expenseController.updateExpense(expense);
-
-                } catch (NumberFormatException | ParseException e) {
-                    e.printStackTrace();
-                    Toast.makeText(UpdateExpenseActivity.this, "Invalid amount or date format", Toast.LENGTH_SHORT).show();
+                    amount = Double.parseDouble(cleanedAmountString);
+                } catch (NumberFormatException e) {
+                    Log.e("UpdateExpense", "Amount Parsing Error", e);
+                    showMotionToast("Update Expense", "Invalid amount format", MotionToastStyle.ERROR);
+                    return;
                 }
+                SimpleDateFormat[] possibleDateFormats = {
+                        new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()),
+                        new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()),
+                        new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                };
+
+                Date selectedDateObj = null;
+                for (SimpleDateFormat sdf : possibleDateFormats) {
+                    try {
+                        selectedDateObj = sdf.parse(dateString);
+                        if (selectedDateObj != null) {
+                            Log.d("UpdateExpense", "Date parsed successfully with format: " + sdf.toPattern());
+                            break;
+                        }
+                    } catch (ParseException e) {
+                        Log.d("UpdateExpense", "Failed to parse with format: " + sdf.toPattern());
+                    }
+                }
+
+                if (selectedDateObj == null) {
+                    showMotionToast("Update Expense", "Invalid date format", MotionToastStyle.ERROR);
+                    return;
+                }
+
+                Date expenseDate = parseOriginalDate(expenseDateString);
+                Expense expense = new Expense(expenseId,expenseCategoryId,userId, amount, selectedDateObj, expenseDate, new Date());
+
+                expenseController.updateExpense(expense);
+            } catch (Exception e) {
+                Log.e("UpdateExpense", "Unexpected Error", e);
+                showMotionToast("Update Expense", "An unexpected error occurred", MotionToastStyle.ERROR);
             }
+
         });
 
+    }
+
+    private Date parseOriginalDate(String incomeDateString) {
+
+        SimpleDateFormat[] dateFormats = {
+                new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()),
+                new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH),
+                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+        };
+
+        for (SimpleDateFormat sdf : dateFormats) {
+            try {
+
+                Log.d("UpdateIncome", "Attempting to parse with format: " + sdf.toPattern());
+
+                Date parsedDate = sdf.parse(incomeDateString);
+
+                if (parsedDate != null) {
+                    Log.d("UpdateIncome", "Date parsed successfully: " + parsedDate);
+                    return parsedDate;
+                }
+            } catch (ParseException e) {
+
+                Log.d("UpdateIncome", "Failed to parse with format: " + sdf.toPattern());
+            }
+        }
+
+
+        Log.e("UpdateIncome", "Unable to parse date string: " + incomeDateString);
+
+        return new Date();
     }
     private void showDatePickerDialog() {
         Calendar calendar = Calendar.getInstance();
@@ -155,6 +207,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements ExpenseL
         amountTextEdit.setText("");
         dateTextEdit.setText("");
         Intent intent = new Intent(UpdateExpenseActivity.this, RecordExpenseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -175,10 +228,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements ExpenseL
         }
     }
 
-    @Override
-    public void onLoadDataExpenseSuccess(ArrayList<Expense> expenseList) {
 
-    }
 
     @Override
     public void onDataExpenseSuccess(Expense expense) {

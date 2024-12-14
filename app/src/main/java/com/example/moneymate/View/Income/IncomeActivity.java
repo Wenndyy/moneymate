@@ -40,8 +40,6 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
     private FirebaseAuth mAuth;
     private String userId;
     private Toolbar toolbar;
-    private ImageView backArrow;
-
     private TextView categoryTitleText;
     private ImageView categoryIcon;
 
@@ -72,20 +70,13 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
         amountTextEdit = findViewById(R.id.amountTextEdit);
         dateTextEdit = findViewById(R.id.DateTextEdit);
         submitButton = findViewById(R.id.submitButton);
-        backArrow = findViewById(R.id.backArrow);
+
         dateTextEdit = findViewById(R.id.DateTextEdit);
         cancelButton = findViewById(R.id.cancelButton);
         layoutIncome = findViewById(R.id.layoutIncome);
         layoutProgress = findViewById(R.id.layoutProgress);
 
 
-
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(IncomeActivity.this, DashboardActivity.class);
@@ -176,7 +167,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
         amountTextEdit.setText("");
         dateTextEdit.setText("");
         Intent intent = new Intent(IncomeActivity.this, RecordIncomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -197,15 +188,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
         }
     }
 
-    @Override
-    public void onLoadDataIncomeSuccess(ArrayList<Income> incomeList) {
 
-    }
-
-    @Override
-    public void onDataIncomeSuccess(Income income) {
-
-    }
 
     private void showMotionToast(String title, String message, MotionToastStyle style) {
         MotionToast.Companion.createColorToast(
