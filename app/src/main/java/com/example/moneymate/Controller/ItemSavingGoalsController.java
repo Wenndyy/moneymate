@@ -3,7 +3,6 @@ package com.example.moneymate.Controller;
 import android.util.Log;
 
 import com.example.moneymate.Interface.ItemDepositListener;
-import com.example.moneymate.Model.CategoryExpense;
 import com.example.moneymate.Model.CategorySavingGoals;
 import com.example.moneymate.Model.ItemGoals;
 import com.example.moneymate.Model.SavingGoals;
@@ -15,12 +14,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ItemBudgetController extends ItemGoals {
+public class ItemSavingGoalsController extends ItemGoals {
     private ItemDepositListener itemDepositListener;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    public ItemBudgetController(String idItemGoals, String idCategoryGoals, String idUser, double amount, Date dateOfGoals, Date created_at, Date updated_at) {
+    public ItemSavingGoalsController(String idItemGoals, String idCategoryGoals, String idUser, double amount, Date dateOfGoals, Date created_at, Date updated_at) {
         super(idItemGoals, idCategoryGoals, idUser, amount, dateOfGoals, created_at, updated_at);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

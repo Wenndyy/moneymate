@@ -28,7 +28,6 @@ public class BudgetController extends Budget{
     private FirebaseFirestore db;
     private BudgetListener budgetListener;
     private BudgetDetailListener budgetDetailListener;
-
     private MessageListener messageListener;
     private SetBudgetListener setBudgetListener;
 

@@ -11,23 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.moneymate.Controller.ExpenseController;
-import com.example.moneymate.Controller.ItemBudgetController;
+import com.example.moneymate.Controller.ItemSavingGoalsController;
 import com.example.moneymate.Interface.ItemDepositListener;
 import com.example.moneymate.Model.CategorySavingGoals;
 import com.example.moneymate.R;
-import com.example.moneymate.View.Dashboard.DashboardActivity;
-import com.example.moneymate.View.Expense.ExpenseActivity;
-import com.example.moneymate.View.Expense.RecordExpenseActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -84,9 +76,9 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
         idCategory = getIntent().getStringExtra("idCategory");
 
         if (idCategory != null) {
-            ItemBudgetController itemBudgetController = new ItemBudgetController("","","",0,new Date(),new Date(),new Date());
-            itemBudgetController.setItemDepositListener(this);
-            itemBudgetController.getCategoryDataById(idCategory);
+            ItemSavingGoalsController itemSavingGoalsController = new ItemSavingGoalsController("","","",0,new Date(),new Date(),new Date());
+            itemSavingGoalsController.setItemDepositListener(this);
+            itemSavingGoalsController.getCategoryDataById(idCategory);
         }
 
         submitButton.setOnClickListener(view -> submitDeposit());
@@ -158,7 +150,7 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
         Date selectedDateObj = calendar.getTime();
 
 
-        ItemBudgetController itemBudgetController = new ItemBudgetController("",idCategory,idUser,amount,selectedDateObj,createdAt,updatedAt);
+        ItemSavingGoalsController itemBudgetController = new ItemSavingGoalsController("",idCategory,idUser,amount,selectedDateObj,createdAt,updatedAt);
         itemBudgetController.setItemDepositListener(this);
         itemBudgetController.getCategoryDataById(idCategory);
 

@@ -68,8 +68,6 @@ public class SavingGoalsController extends SavingGoals {
 
     public void saveGoals(SavingGoals savingGoals) {
         goalsListener.onMessageLoading(true);
-
-        // Validasi jika Goals untuk kategori sudah ada
         db.collection("SavingGoals")
                 .whereEqualTo("idCategory", savingGoals.getIdCategory())
                 .whereEqualTo("idUser", savingGoals.getIdUser())

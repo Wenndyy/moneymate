@@ -70,12 +70,9 @@ public  class Income {
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
-
-
     public Date getDateOfIncome() {
         return dateOfIncome;
     }
-
     public void setDateOfIncome(Date dateOfIncome) {
         this.dateOfIncome = dateOfIncome;
     }

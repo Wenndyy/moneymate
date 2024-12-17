@@ -1,6 +1,7 @@
 package com.example.moneymate.Controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.moneymate.Interface.MessageListener;
 import com.example.moneymate.Interface.ProfileListener;
@@ -88,6 +89,7 @@ public class UserController extends User {
                                     });
                         }
                     } else {
+                        Log.e("RegisterActivity", "Error checking email existence", task.getException());
                         messageListener.onMessageFailure("Failed to check email existence!");
                         messageListener.onMessageLoading(false);
                     }
