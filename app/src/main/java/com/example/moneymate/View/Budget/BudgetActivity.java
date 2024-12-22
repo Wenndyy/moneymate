@@ -74,6 +74,7 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(BudgetActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -93,7 +94,7 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
         String amountStr = amountTextEdit.getText().toString();
 
         if (amountStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Budget", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 
@@ -139,7 +140,7 @@ public class BudgetActivity extends AppCompatActivity implements BudgetListener 
         amountTextEdit.setText("");
 
         Intent intent = new Intent(BudgetActivity.this, SetBudgetActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

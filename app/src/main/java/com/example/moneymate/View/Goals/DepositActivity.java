@@ -68,6 +68,7 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(DepositActivity.this, GoalsDetailActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -132,7 +133,7 @@ public class DepositActivity extends AppCompatActivity implements ItemDepositLis
 
 
         if (amountStr.isEmpty() || dateStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Deposit", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 

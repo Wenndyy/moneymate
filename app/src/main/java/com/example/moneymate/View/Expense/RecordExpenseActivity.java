@@ -170,7 +170,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
                             }
 
 
-                            expenseAmount.setText(formatRupiah(expense.getAmount()));
+                            expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
                         } else {
                             Log.d("getIncomeCategory", "No such category found!");
                             expenseType.setText("Unknown Category");

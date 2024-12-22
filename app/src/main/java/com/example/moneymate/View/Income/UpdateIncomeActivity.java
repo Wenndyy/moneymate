@@ -25,7 +25,9 @@ import com.example.moneymate.View.Dashboard.DashboardActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -56,6 +58,7 @@ public class UpdateIncomeActivity extends AppCompatActivity implements UpdateInc
         btnCancel = findViewById(R.id.cancelButton);
         btnCancel.setOnClickListener(v -> {
             Intent intent = new Intent(UpdateIncomeActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -90,11 +93,9 @@ public class UpdateIncomeActivity extends AppCompatActivity implements UpdateInc
             String dateString = dateTextEdit.getText().toString().trim();
 
             try {
-                Log.d("UpdateIncome", "Original Amount String: " + amountString);
-                Log.d("UpdateIncome", "Original Date String: " + dateString);
 
                 String cleanedAmountString = amountString.replaceAll("[^\\d.]", "").trim();
-                Log.d("UpdateIncome", "Cleaned Amount String: " + cleanedAmountString);
+
                 double amount;
                 try {
                     amount = Double.parseDouble(cleanedAmountString);
@@ -129,7 +130,7 @@ public class UpdateIncomeActivity extends AppCompatActivity implements UpdateInc
 
                 Date incomeDate = parseOriginalDate(incomeDateString);
 
-                // Create updated income object
+
                 Income updatedIncome = new Income(
                         incomeId,
                         incomeCategoryId,
@@ -140,7 +141,6 @@ public class UpdateIncomeActivity extends AppCompatActivity implements UpdateInc
                         new Date()
                 );
 
-                // Call update method
                 incomeController.updateIncome(updatedIncome);
 
             } catch (Exception e) {
@@ -242,7 +242,11 @@ public class UpdateIncomeActivity extends AppCompatActivity implements UpdateInc
 
     @Override
     public void onDataIncomeSuccess(Income income) {
-        amountTextEdit.setText(String.valueOf((int)income.getAmount()));
+        double amount = income.getAmount();
+        BigDecimal formattedAmount = new BigDecimal(amount).stripTrailingZeros();
+        amountTextEdit.setText(formattedAmount.toPlainString());
+
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date dateOfIncome = income.getDateOfIncome();
         String formattedDate = sdf.format(dateOfIncome);

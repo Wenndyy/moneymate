@@ -19,6 +19,7 @@ import com.example.moneymate.Interface.MessageListener;
 import com.example.moneymate.Model.SavingGoals;
 import com.example.moneymate.R;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,6 +45,7 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
         cancelButton = findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(v -> {
             Intent intent = new Intent(UpdateGoalsActivity.this, SetGoalsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -62,7 +64,8 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
         categoryNameView = findViewById(R.id.category_title);
 
         categoryNameView.setText(categoryName);
-        amountView.setText(String.valueOf(amount));
+        BigDecimal formattedAmount = new BigDecimal(goalAmount).stripTrailingZeros();
+        amountView.setText(formattedAmount.toPlainString());
 
         cancelButton = findViewById(R.id.cancelButton);
         layoutGoals= findViewById(R.id.layoutGoals);
@@ -90,7 +93,7 @@ public class UpdateGoalsActivity extends AppCompatActivity implements MessageLis
         String amountStr = amountView.getText().toString();
 
         if (amountStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Saving Goals", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 

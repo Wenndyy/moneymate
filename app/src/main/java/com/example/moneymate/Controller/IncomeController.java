@@ -112,8 +112,10 @@ public class IncomeController  extends  Income{
     }
 
     public void loadIncomeByIdIncome(String incomeId) {
+        String idUser = mAuth.getCurrentUser().getUid();
         updateIncomeListener.onMessageLoading(true);
         db.collection("Income").whereEqualTo("idIncome", incomeId)
+                .whereEqualTo("idUser", idUser)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -134,7 +136,8 @@ public class IncomeController  extends  Income{
     }
     public void updateIncome(Income income) {
         updateIncomeListener.onMessageLoading(true);
-        db.collection("Income").document(income.getIdIncome())
+        db.collection("Income")
+                .document(income.getIdIncome())
                 .set(income)
                 .addOnSuccessListener(aVoid -> {
                     updateIncomeListener.onMessageSuccess("Updated Success!");

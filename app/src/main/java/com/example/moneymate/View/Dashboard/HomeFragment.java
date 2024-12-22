@@ -273,8 +273,8 @@ public class HomeFragment extends Fragment implements DashboardListener {
     }
     private void setDefaultCategory(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
         incomeType.setText("Unknown Category");
-        incomeAmount.setText(formatRupiah(income.getAmount()));
-        categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+        incomeAmount.setText("+ "+formatRupiah(income.getAmount()));
+        categoryIcon.setImageResource(R.drawable.ic_default);
     }
     private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
         if (getContext() != null) {  // Check if fragment is attached
@@ -298,7 +298,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
                                 } else {
                                     categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
                                 }
-                                incomeAmount.setText(formatRupiah(income.getAmount()));
+                                incomeAmount.setText("+ "+ formatRupiah(income.getAmount()));
                             } else {
                                 Log.d("getIncomeCategory", "No such category found!");
                                 setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
@@ -390,7 +390,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
                                 } else {
                                     categoryIcon.setImageResource(R.drawable.ic_default);
                                 }
-                                expenseAmount.setText(formatRupiah(expense.getAmount()));
+                                expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
                             } else {
                                 Log.d("getExpenseCategory", "No such category found!");
                                 setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
@@ -453,9 +453,9 @@ public class HomeFragment extends Fragment implements DashboardListener {
             }
         }
     }
-    private void setDefaultCategoryExpense(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Expense expense) {
-        incomeType.setText("Unknown Category");
-        incomeAmount.setText(formatRupiah(expense.getAmount()));
+    private void setDefaultCategoryExpense(TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
+        expenseType.setText("Unknown Category");
+        expenseAmount.setText("- "+ formatRupiah(expense.getAmount()));
         categoryIcon.setImageResource(R.drawable.ic_default);
     }
 

@@ -67,6 +67,7 @@ public class GoalsActivity extends AppCompatActivity implements GoalsListener {
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(GoalsActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -86,7 +87,7 @@ public class GoalsActivity extends AppCompatActivity implements GoalsListener {
     private void submitGoals() {
         String amountStr = amountTextEdit.getText().toString();
         if (amountStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Saving Goals", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 

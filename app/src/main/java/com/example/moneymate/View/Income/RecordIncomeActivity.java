@@ -63,6 +63,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
         backArrow = findViewById(R.id.backArrow);
         backArrow.setOnClickListener(v -> {
            onBackPressed();
+
         });
 
         recordLayout = findViewById(R.id.recordLayout);
@@ -159,7 +160,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
                             }
 
 
-                            incomeAmount.setText(formatRupiah(income.getAmount()));
+                            incomeAmount.setText("+ " + formatRupiah(income.getAmount()));
                         } else {
                             Log.d("getIncomeCategory", "No such category found!");
                             incomeType.setText("Unknown Category");
@@ -248,8 +249,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        formatRupiah.setMaximumFractionDigits(0);
-        formatRupiah.setMinimumFractionDigits(0);
+
         return formatRupiah.format(amount);
     }
 

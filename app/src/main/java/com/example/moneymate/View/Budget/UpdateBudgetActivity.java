@@ -19,6 +19,7 @@ import com.example.moneymate.Interface.MessageListener;
 import com.example.moneymate.R;
 import com.example.moneymate.View.Goals.SetGoalsActivity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import www.sanju.motiontoast.MotionToast;
@@ -40,6 +41,7 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
         cancelButton = findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(v -> {
             Intent intent = new Intent(UpdateBudgetActivity.this, SetBudgetActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -55,7 +57,11 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
         categoryNameView = findViewById(R.id.category_title);
 
         categoryNameView.setText(categoryName);
-        amountView.setText(String.valueOf(amount));
+
+        BigDecimal formattedAmount = new BigDecimal(goalAmount).stripTrailingZeros();
+        amountView.setText(formattedAmount.toPlainString());
+
+
 
         cancelButton = findViewById(R.id.cancelButton);
         layoutBudget = findViewById(R.id.layoutBudget);
@@ -83,7 +89,7 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
         String amountStr = amountView.getText().toString();
 
         if (amountStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Budget", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 
@@ -106,7 +112,7 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
     }
     @Override
     public void onMessageSuccess(String message) {
-        showMotionToast("Saving Goals" , message , MotionToastStyle.SUCCESS);
+        showMotionToast("Budget" , message , MotionToastStyle.SUCCESS);
         Intent intent = new Intent(this, SetBudgetActivity.class);
         startActivity(intent);
         finish();

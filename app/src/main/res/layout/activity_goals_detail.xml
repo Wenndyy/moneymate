@@ -143,6 +143,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="Rp1.000.000,00"
                                     android:textSize="20dp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
                                     android:fontFamily="@font/poppins_medium"
                                     android:textColor="@color/black"/>
                                 <LinearLayout
@@ -156,6 +158,7 @@
                                         android:layout_height="27dp"
                                         android:text="20%"
                                         android:textSize="14dp"
+
                                         android:fontFamily="@font/poppins_regular"
                                         android:textColor="@color/black"/>
                                 </LinearLayout>

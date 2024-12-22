@@ -27,9 +27,11 @@ import com.example.moneymate.View.Dashboard.DashboardActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import www.sanju.motiontoast.MotionToast;
 import www.sanju.motiontoast.MotionToastStyle;
@@ -80,6 +82,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
 
         cancelButton.setOnClickListener(view -> {
             Intent intent = new Intent(IncomeActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -122,7 +125,7 @@ public class IncomeActivity extends AppCompatActivity implements IncomeListener 
 
 
         if (amountStr.isEmpty() || dateStr.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showMotionToast("Income", "Please fill in all fields", MotionToastStyle.WARNING);
             return;
         }
 

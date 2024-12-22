@@ -27,6 +27,8 @@ import com.example.moneymate.View.Dashboard.DashboardActivity;
 import com.example.moneymate.View.Income.UpdateIncomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements UpdateEx
         btnCancel = findViewById(R.id.cancelButton);
         btnCancel.setOnClickListener(v -> {
             Intent intent = new Intent(UpdateExpenseActivity.this, CategoryExpenseActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -208,6 +211,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements UpdateEx
         dateTextEdit.setText("");
         Intent intent = new Intent(UpdateExpenseActivity.this, RecordExpenseActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(intent);
         finish();
     }
@@ -232,7 +236,10 @@ public class UpdateExpenseActivity extends AppCompatActivity implements UpdateEx
 
     @Override
     public void onDataExpenseSuccess(Expense expense) {
-        amountTextEdit.setText(String.valueOf((int)expense.getAmount()));
+        double amount = expense.getAmount();
+        BigDecimal formattedAmount = new BigDecimal(amount).stripTrailingZeros();
+        amountTextEdit.setText(formattedAmount.toPlainString());
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date dateOfExpense = expense.getDateOfExpense();
         String formattedDate = sdf.format(dateOfExpense);
