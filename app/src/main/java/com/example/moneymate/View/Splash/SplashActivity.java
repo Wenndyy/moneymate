@@ -24,8 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_splash);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         fAuth = FirebaseAuth.getInstance();
         boolean isFirst = getSharedPreferences("FirstInstalled", Context.MODE_PRIVATE).getBoolean("firstTime", false);
 

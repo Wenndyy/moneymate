@@ -36,7 +36,7 @@ public class UserController extends User {
                             messageListener.onMessageSuccess("Login Success!");
                         }
                     }else {
-                        messageListener.onMessageFailure("Login Failed!");
+                        messageListener.onMessageFailure("Login Failed! Wrong email or password!");
                     }
                     messageListener.onMessageLoading(false);
                 });

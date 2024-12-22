@@ -17,6 +17,7 @@ public class Splash2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_splash2);
+
         getSharedPreferences("FirstInstalled", MODE_PRIVATE)
                 .edit()
                 .putBoolean("firstTime", true)

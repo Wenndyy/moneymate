@@ -75,10 +75,11 @@ public class ProfileFragment extends Fragment implements ProfileListener {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+        showMotionToast("Logout Account",message, MotionToastStyle.SUCCESS);
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(intent);
-        showMotionToast("Logout Account",message, MotionToastStyle.SUCCESS);
+
 
     }
 

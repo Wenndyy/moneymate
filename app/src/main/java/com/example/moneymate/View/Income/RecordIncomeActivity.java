@@ -249,7 +249,8 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-
+        formatRupiah.setMaximumFractionDigits(0);
+        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
     }
 
