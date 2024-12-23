@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -139,8 +140,11 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
             layoutProgress.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            Map<String, ArrayList<Expense>> groupedData = new HashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+            Collections.sort(expenseList, (expense1, expense2) ->
+                    expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense())
+            );
+            Map<String, ArrayList<Expense>> groupedData= new LinkedHashMap<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
 
             for (Expense expense : expenseList) {
                 Date dateOfExpense = expense.getDateOfExpense();

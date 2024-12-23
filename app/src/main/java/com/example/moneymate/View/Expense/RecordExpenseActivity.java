@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -201,7 +202,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
         getExpenseCategory(expense.getIdCategoryExpense(), categoryTitle, amountText, imgCategory, expense);
         amountText.setText(formatRupiah(expense.getAmount()));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateText.setText(sdf.format(expense.getDateOfExpense()));
 
         dialogBuilder.setView(dialogView);
@@ -283,19 +284,19 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
 
     @Override
     public void onLoadDataExpenseSuccess(ArrayList<Expense> expenseList) {
-        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
 
-        SimpleDateFormat sortDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+
         if (expenseList.isEmpty()) {
             noValue.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            Collections.sort(expenseList, (expense1, expense2) ->{
-                return sortDateFormat.format(expense2.getDateOfExpense()).compareTo(sortDateFormat.format(expense2.getDateOfExpense()));
-            });
 
-            Map<String, ArrayList<Expense>> groupedData = new HashMap<>();
+            Collections.sort(expenseList, (expense1, expense2) ->
+                    expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense())
+            );
+            Map<String, ArrayList<Expense>> groupedData = new LinkedHashMap<>();
             for (Expense expense : expenseList) {
                 String formattedDate = displayDateFormat.format(expense.getDateOfExpense());
                 if (!groupedData.containsKey(formattedDate)) {

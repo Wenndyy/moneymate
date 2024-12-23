@@ -114,6 +114,7 @@ public class UpdateBudgetActivity extends AppCompatActivity implements MessageLi
     public void onMessageSuccess(String message) {
         showMotionToast("Budget" , message , MotionToastStyle.SUCCESS);
         Intent intent = new Intent(this, SetBudgetActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

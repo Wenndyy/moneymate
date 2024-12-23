@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.moneymate.Controller.DashboardController;
 import com.example.moneymate.Controller.HistoryController;
 import com.example.moneymate.Interface.RecordListener;
 import com.example.moneymate.Model.Expense;
@@ -119,33 +118,34 @@ public class HistoryFragment extends Fragment implements RecordListener {
     @Override
     public void onLoadLastIncomeSuccess(Income lastIncome, List<Income> incomeList) {
         if (lastIncome != null) {
-            // Menyembunyikan dan menampilkan UI yang sesuai
-            noValueIncome.setVisibility(View.GONE);
-            recordIncomeLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            if (isAdded() && getContext() != null) {
+                // Menyembunyikan dan menampilkan UI yang sesuai
+                noValueIncome.setVisibility(View.GONE);
+                recordIncomeLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
 
-            // Inflating view untuk income terakhir
-            View lastIncomeView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.record_income_item, recordIncomeLayout, false);
+                // Inflating view untuk income terakhir
+                View lastIncomeView = LayoutInflater.from(getActivity())
+                        .inflate(R.layout.record_income_item, recordIncomeLayout, false);
 
-            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
-            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
-            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
+                TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
+                TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
+                ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
 
-            // Mengambil kategori income dan menampilkan
-            getIncomeCategory(lastIncome.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, lastIncome);
+                // Mengambil kategori income dan menampilkan
+                getIncomeCategory(lastIncome.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, lastIncome);
 
-            // Urutkan income berdasarkan tanggal terbaru
-            Collections.sort(incomeList, (income1, income2) -> {
-                if (income1.getDateOfIncome() == null || income2.getDateOfIncome() == null) {
-                    return 0; // Jangan urutkan jika salah satu tanggal null
-                }
-                return income2.getDateOfIncome().compareTo(income1.getDateOfIncome()); // Urutkan dari terbaru
-            });
+                // Urutkan income berdasarkan tanggal terbaru
+                Collections.sort(incomeList, (income1, income2) -> {
+                    if (income1.getDateOfIncome() == null || income2.getDateOfIncome() == null) {
+                        return 0; // Jangan urutkan jika salah satu tanggal null
+                    }
+                    return income2.getDateOfIncome().compareTo(income1.getDateOfIncome()); // Urutkan dari terbaru
+                });
 
-            // Menampilkan hanya income yang berada di tanggal terbaru
-            displayLatestIncome(incomeList);
-
+                // Menampilkan hanya income yang berada di tanggal terbaru
+                displayLatestIncome(incomeList);
+            }
         } else {
             // Jika tidak ada data
             noValueIncome.setVisibility(View.VISIBLE);
@@ -157,33 +157,34 @@ public class HistoryFragment extends Fragment implements RecordListener {
     @Override
     public void onLoadLastExpenseSuccess(Expense lastExpense, List<Expense> expenseList) {
         if (lastExpense != null) {
-            // Menyembunyikan dan menampilkan UI yang sesuai
-            noValueExpense.setVisibility(View.GONE);
-            recordExpenseLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            if (isAdded() && getContext() != null) {
+                // Menyembunyikan dan menampilkan UI yang sesuai
+                noValueExpense.setVisibility(View.GONE);
+                recordExpenseLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
 
-            // Inflating view untuk income terakhir
-            View lastIncomeView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
+                // Inflating view untuk income terakhir
+                View lastIncomeView = LayoutInflater.from(getActivity())
+                        .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
 
-            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
-            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
-            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
+                TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
+                TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
+                ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
 
-            // Mengambil kategori income dan menampilkan
-            getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
+                // Mengambil kategori income dan menampilkan
+                getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
 
-            // Urutkan income berdasarkan tanggal terbaru
-            Collections.sort(expenseList, (expense1, expense2) -> {
-                if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
-                    return 0; // Jangan urutkan jika salah satu tanggal null
-                }
-                return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
-            });
+                // Urutkan income berdasarkan tanggal terbaru
+                Collections.sort(expenseList, (expense1, expense2) -> {
+                    if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
+                        return 0; // Jangan urutkan jika salah satu tanggal null
+                    }
+                    return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
+                });
 
-            // Menampilkan hanya income yang berada di tanggal terbaru
-            displayLatestExpense(expenseList);
-
+                // Menampilkan hanya income yang berada di tanggal terbaru
+                displayLatestExpense(expenseList);
+            }
         } else {
             // Jika tidak ada data
             noValueExpense.setVisibility(View.VISIBLE);
@@ -196,7 +197,9 @@ public class HistoryFragment extends Fragment implements RecordListener {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
         if (!incomeList.isEmpty()) {
-
+            Collections.sort(incomeList, (income1, income2) ->
+                    income2.getDateOfIncome().compareTo(income1.getDateOfIncome())
+            );
             Date latestDate = incomeList.get(0).getDateOfIncome();
 
             List<Income> latestIncomeList = new ArrayList<>();
@@ -215,23 +218,23 @@ public class HistoryFragment extends Fragment implements RecordListener {
             recordIncomeLayout.removeAllViews();
 
             if (!latestIncomeList.isEmpty()) {
-                // Menampilkan tanggal
-                SimpleDateFormat sdf2 = new SimpleDateFormat("E, MM/dd");
+
+                SimpleDateFormat sdf2 = new SimpleDateFormat("E, dd/MM");
                 View dateView = inflater.inflate(R.layout.record_date_layout, null);
                 TextView dateText = dateView.findViewById(R.id.dateText);
                 dateText.setText(sdf2.format(latestDate));
 
-                // Layout untuk income berdasarkan tanggal terbaru
+
                 LinearLayout dateLayout = new LinearLayout(getContext());
                 dateLayout.setOrientation(LinearLayout.VERTICAL);
                 dateLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_item_record));
 
-                dateLayout.addView(dateView); // Menambahkan tampilan tanggal
+                dateLayout.addView(dateView);
 
-                // Batasi hanya 4 item terbaru yang ditampilkan
-                int itemCount = Math.min(latestIncomeList.size(), 4);  // Menampilkan maksimal 4 item
 
-                // Menampilkan income berdasarkan tanggal terbaru
+                int itemCount = Math.min(latestIncomeList.size(), 4);
+
+
                 for (int i = 0; i < itemCount; i++) {
                     Income income = latestIncomeList.get(i);
 
@@ -240,20 +243,20 @@ public class HistoryFragment extends Fragment implements RecordListener {
                     TextView incomeAmount = incomeView.findViewById(R.id.incomeAmount);
                     ImageView categoryIcon = incomeView.findViewById(R.id.categoryIcon);
 
-                    // Menampilkan kategori income
+
                     getIncomeCategory(income.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, income);
 
-                    // Menambahkan income ke dalam layout
+
                     dateLayout.addView(incomeView);
 
-                    // Tambahkan garis pembatas antar item
+
                     View view = incomeView.findViewById(R.id.garis);
                     view.setVisibility(View.VISIBLE);
                 }
 
-                addShowMoreTextView(dateLayout); // Menambahkan opsi untuk menampilkan lebih banyak data jika diperlukan
+                addShowMoreTextView(dateLayout);
 
-                // Menambahkan layout dateLayout ke layout utama
+
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 10, 0, 16);
@@ -268,13 +271,15 @@ public class HistoryFragment extends Fragment implements RecordListener {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
         if (!expenseList.isEmpty()) {
-
+            Collections.sort(expenseList, (expense1, expense2) ->
+                    expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense())
+            );
             Date latestDate = expenseList.get(0).getDateOfExpense();
 
             List<Expense> latestExpenseList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-            // Filter income berdasarkan tanggal yang sama dengan tanggal terbaru
+
             for (Expense expense : expenseList) {
                 String expenseDate = sdf.format(expense.getDateOfExpense());
                 String latestExpenseDate = sdf.format(latestDate);
@@ -288,7 +293,7 @@ public class HistoryFragment extends Fragment implements RecordListener {
 
             if (!latestExpenseList.isEmpty()) {
                 // Menampilkan tanggal
-                SimpleDateFormat sdf2 = new SimpleDateFormat("E, MM/dd");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("E, dd/MM");
                 View dateView = inflater.inflate(R.layout.record_date_layout, null);
                 TextView dateText = dateView.findViewById(R.id.dateText);
                 dateText.setText(sdf2.format(latestDate));
@@ -335,85 +340,96 @@ public class HistoryFragment extends Fragment implements RecordListener {
         }
     }
     private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
-        db.collection("CategoryIncome")
-                .document(categoryId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String categoryName = document.getString("incomeCategoryName");
-                            String iconName = document.getString("categoryIncomeImage");
+        if (isAdded() && getContext() != null) {
+            db.collection("CategoryIncome")
+                    .document(categoryId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (isAdded() && getContext() != null) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String categoryName = document.getString("incomeCategoryName");
+                                    String iconName = document.getString("categoryIncomeImage");
 
-                            // Set nama kategori
-                            incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                    // Set nama kategori
+                                    incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
 
-                            // Set icon kategori
-                            if (iconName != null && !iconName.isEmpty()) {
-                                int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                    // Set icon kategori
+                                    if (iconName != null && !iconName.isEmpty()) {
+                                        int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
 
-                                if (iconResId != 0) {
-                                    categoryIcon.setImageResource(iconResId);
+                                        if (iconResId != 0) {
+                                            categoryIcon.setImageResource(iconResId);
+                                        } else {
+                                            Log.w("getIncomeCategory", "Icon not found for " + iconName);
+                                            categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                        }
+                                    } else {
+                                        categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                    }
+
+                                    // Set jumlah income
+                                    incomeAmount.setText(formatRupiah(income.getAmount()));
                                 } else {
-                                    Log.w("getIncomeCategory", "Icon not found for " + iconName);
-                                    categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                    Log.d("getIncomeCategory", "No such category found!");
+                                    setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                                 }
                             } else {
-                                categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                Log.d("getIncomeCategory", "Error getting category", task.getException());
+                                setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                             }
-
-                            // Set jumlah income
-                            incomeAmount.setText(formatRupiah(income.getAmount()));
-                        } else {
-                            Log.d("getIncomeCategory", "No such category found!");
-                            setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                         }
-                    } else {
-                        Log.d("getIncomeCategory", "Error getting category", task.getException());
-                        setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
-                    }
-                });
+                    });
+        }
+
     }
 
     private void getExpenseCategory(String categoryId, TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
-        db.collection("CategoryExpense")
-                .document(categoryId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String categoryName = document.getString("expenseCategoryName");
-                            String iconName = document.getString("categoryExpenseImage");
+        if (isAdded() && getContext() != null) {
+            db.collection("CategoryExpense")
+                    .document(categoryId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (isAdded() && getContext() != null) {
+                            if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String categoryName = document.getString("expenseCategoryName");
+                                String iconName = document.getString("categoryExpenseImage");
 
-                            // Set nama kategori
-                            expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                // Set nama kategori
+                                expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
 
-                            // Set icon kategori
-                            if (iconName != null && !iconName.isEmpty()) {
-                                int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                // Set icon kategori
+                                if (iconName != null && !iconName.isEmpty()) {
+                                    int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
 
-                                if (iconResId != 0) {
-                                    categoryIcon.setImageResource(iconResId);
+                                    if (iconResId != 0) {
+                                        categoryIcon.setImageResource(iconResId);
+                                    } else {
+                                        Log.w("getIncomeCategory", "Icon not found for " + iconName);
+                                        categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                    }
                                 } else {
-                                    Log.w("getIncomeCategory", "Icon not found for " + iconName);
                                     categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
                                 }
-                            } else {
-                                categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
-                            }
 
-                            // Set jumlah income
-                            expenseAmount.setText(formatRupiah(expense.getAmount()));
+                                // Set jumlah income
+                                expenseAmount.setText(formatRupiah(expense.getAmount()));
+                            } else {
+                                Log.d("getIncomeCategory", "No such category found!");
+                                setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
+                            }
                         } else {
-                            Log.d("getIncomeCategory", "No such category found!");
-                            setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
+                                Log.d("getIncomeCategory", "Error getting category", task.getException());
+                                setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
+                            }
                         }
-                    } else {
-                        Log.d("getIncomeCategory", "Error getting category", task.getException());
-                        setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
-                    }
-                });
+
+                    });
+        }
+
     }
 
     private void setDefaultCategory(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {

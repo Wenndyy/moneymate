@@ -32,8 +32,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -196,8 +198,11 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
             layoutProgress.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            Map<String, ArrayList<ItemGoals>> groupedData = new HashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+            Collections.sort(itemGoalsArrayList, (goal1, goal2) ->
+                    goal2.getDateOfGoals().compareTo(goal1.getDateOfGoals())
+            );
+            Map<String, ArrayList<ItemGoals>> groupedData = new LinkedHashMap<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
 
             for (ItemGoals itemGoals : itemGoalsArrayList) {
                 Date dateOfExpense = itemGoals.getDateOfGoals();

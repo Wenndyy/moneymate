@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -191,7 +192,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
         getIncomeCategory(income.getIdCategoryIncome(), categoryTitle, amountText, imgCategory, income);
         amountText.setText(formatRupiah(income.getAmount()));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateText.setText(sdf.format(income.getDateOfIncome()));
 
         dialogBuilder.setView(dialogView);
@@ -273,19 +274,19 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
 
     @Override
     public void onLoadDataIncomeSuccess(ArrayList<Income> incomeList) {
-        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, MM/dd", Locale.getDefault());
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("E, dd/MM", Locale.getDefault());
 
-        SimpleDateFormat sortDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+
         if (incomeList.isEmpty()) {
             noValue.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recordLayout.setVisibility(View.GONE);
         } else {
-            Collections.sort(incomeList, (income1, income2) -> {
-                return sortDateFormat.format(income2.getDateOfIncome()).compareTo(sortDateFormat.format(income1.getDateOfIncome()));
-            });
+            Collections.sort(incomeList, (income1, income2) ->
+                    income2.getDateOfIncome().compareTo(income1.getDateOfIncome())
+            );
 
-            Map<String, ArrayList<Income>> groupedData = new HashMap<>();
+            Map<String, ArrayList<Income>> groupedData = new LinkedHashMap<>();
             for (Income income : incomeList) {
                 String formattedDate = displayDateFormat.format(income.getDateOfIncome());
 

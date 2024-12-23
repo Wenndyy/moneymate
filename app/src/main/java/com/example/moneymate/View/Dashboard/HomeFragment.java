@@ -134,17 +134,19 @@ public class HomeFragment extends Fragment implements DashboardListener {
 
     @Override
     public void onLoadDataSuccess(Map<String, Object> data) {
-        if (data.containsKey("totalIncome")) {
-            double totalIncome = (double) data.get("totalIncome");
-            TextView incomeTotalTextView = getView().findViewById(R.id.totalIncome);
-            incomeTotalTextView.setText("+ " + formatRupiah(totalIncome));
-        } else if (data.containsKey("fullname")) {
-            String name = (String) data.get("fullname");
-            tvUsername.setText(name);
-        }else if (data.containsKey("totalExpense")){
-            double totalExpense = (double) data.get("totalExpense");
-            TextView expenseTotalTextView = getView().findViewById(R.id.totalExpense);
-            expenseTotalTextView.setText("- " + formatRupiah(totalExpense));
+        if (getView() != null) {
+            if (data.containsKey("totalIncome")) {
+                double totalIncome = (double) data.get("totalIncome");
+                TextView incomeTotalTextView = getView().findViewById(R.id.totalIncome);
+                incomeTotalTextView.setText("+ " + formatRupiah(totalIncome));
+            } else if (data.containsKey("fullname")) {
+                String name = (String) data.get("fullname");
+                tvUsername.setText(name);
+            } else if (data.containsKey("totalExpense")) {
+                double totalExpense = (double) data.get("totalExpense");
+                TextView expenseTotalTextView = getView().findViewById(R.id.totalExpense);
+                expenseTotalTextView.setText("- " + formatRupiah(totalExpense));
+            }
         }
     }
 
@@ -181,32 +183,33 @@ public class HomeFragment extends Fragment implements DashboardListener {
     @Override
     public void onLoadLastIncomeSuccess(Income lastIncome, List<Income> incomeList) {
         if (lastIncome != null) {
-            noValueIncome.setVisibility(View.GONE);
-            recordIncomeLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            if (isAdded() && getContext() != null) {
+                noValueIncome.setVisibility(View.GONE);
+                recordIncomeLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
 
 
-            View lastIncomeView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.record_income_item, recordIncomeLayout, false);
+                View lastIncomeView = LayoutInflater.from(getActivity())
+                        .inflate(R.layout.record_income_item, recordIncomeLayout, false);
 
-            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
-            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
-            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
-
-
-            getIncomeCategory(lastIncome.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, lastIncome);
+                TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
+                TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
+                ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
 
 
-            Collections.sort(incomeList, (income1, income2) -> {
-                if (income1.getDateOfIncome() == null || income2.getDateOfIncome() == null) {
-                    return 0;
-                }
-                return income2.getDateOfIncome().compareTo(income1.getDateOfIncome());
-            });
+                getIncomeCategory(lastIncome.getIdCategoryIncome(), incomeType, incomeAmount, categoryIcon, lastIncome);
 
 
-            displayLatestIncome(incomeList);
+                Collections.sort(incomeList, (income1, income2) -> {
+                    if (income1.getDateOfIncome() == null || income2.getDateOfIncome() == null) {
+                        return 0;
+                    }
+                    return income2.getDateOfIncome().compareTo(income1.getDateOfIncome());
+                });
 
+
+                displayLatestIncome(incomeList);
+            }
         } else {
 
             noValueIncome.setVisibility(View.VISIBLE);
@@ -277,64 +280,68 @@ public class HomeFragment extends Fragment implements DashboardListener {
         categoryIcon.setImageResource(R.drawable.ic_default);
     }
     private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
-        if (getContext() != null) {  // Check if fragment is attached
+        if (getContext() != null && isAdded()) {  // Check if fragment is attached
             db.collection("CategoryIncome")
                     .document(categoryId)
                     .get()
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String categoryName = document.getString("incomeCategoryName");
-                                String iconName = document.getString("categoryIncomeImage");
-                                incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
-                                if (iconName != null && !iconName.isEmpty()) {
-                                    int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
-                                    if (iconResId != 0) {
-                                        categoryIcon.setImageResource(iconResId);
+                        if (isAdded() && getContext() != null) {  // Double check here
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String categoryName = document.getString("incomeCategoryName");
+                                    String iconName = document.getString("categoryIncomeImage");
+                                    incomeType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                    if (iconName != null && !iconName.isEmpty()) {
+                                        int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                        if (iconResId != 0) {
+                                            categoryIcon.setImageResource(iconResId);
+                                        } else {
+                                            categoryIcon.setImageResource(R.drawable.ic_default);
+                                        }
                                     } else {
                                         categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
                                     }
+                                    incomeAmount.setText("+ " + formatRupiah(income.getAmount()));
                                 } else {
-                                    categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
+                                    Log.d("getIncomeCategory", "No such category found!");
+                                    setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                                 }
-                                incomeAmount.setText("+ "+ formatRupiah(income.getAmount()));
                             } else {
-                                Log.d("getIncomeCategory", "No such category found!");
+                                Log.d("getIncomeCategory", "Error getting category", task.getException());
                                 setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                             }
-                        } else {
-                            Log.d("getIncomeCategory", "Error getting category", task.getException());
-                            setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
                         }
                     });
         }
     }
 
+
     @Override
     public void onLoadLastExpenseSuccess(Expense lastExpense, List<Expense> expenseList) {
         if (lastExpense != null) {
-            noValueExpense.setVisibility(View.GONE);
-            recordExpenseLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            if (isAdded() && getContext() != null) {
+                noValueExpense.setVisibility(View.GONE);
+                recordExpenseLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
 
 
-            View lastIncomeView = LayoutInflater.from(getActivity())
-                    .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
+                View lastIncomeView = LayoutInflater.from(getActivity())
+                        .inflate(R.layout.record_expense_item, recordExpenseLayout, false);
 
-            TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
-            TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
-            ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
+                TextView incomeType = lastIncomeView.findViewById(R.id.incomeType);
+                TextView incomeAmount = lastIncomeView.findViewById(R.id.incomeAmount);
+                ImageView categoryIcon = lastIncomeView.findViewById(R.id.categoryIcon);
 
-            getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
-            Collections.sort(expenseList, (expense1, expense2) -> {
-                if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
-                    return 0;
-                }
-                return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
-            });
-            displayLatestExpense(expenseList);
-
+                getExpenseCategory(lastExpense.getIdCategoryExpense(), incomeType, incomeAmount, categoryIcon, lastExpense);
+                Collections.sort(expenseList, (expense1, expense2) -> {
+                    if (expense1.getDateOfExpense() == null || expense2.getDateOfExpense() == null) {
+                        return 0;
+                    }
+                    return expense2.getDateOfExpense().compareTo(expense1.getDateOfExpense()); // Urutkan dari terbaru
+                });
+                displayLatestExpense(expenseList);
+            }
         } else {
 
             noValueExpense.setVisibility(View.VISIBLE);
@@ -369,35 +376,37 @@ public class HomeFragment extends Fragment implements DashboardListener {
     }
 
     private void getExpenseCategory(String categoryId, TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
-        if (getContext() != null) {
+        if (isAdded() && getContext() != null) {  // Ensure the fragment is still attached to the activity and context is non-null
             db.collection("CategoryExpense")
                     .document(categoryId)
                     .get()
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String categoryName = document.getString("expenseCategoryName");
-                                String iconName = document.getString("categoryExpenseImage");
-                                expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
-                                if (iconName != null && !iconName.isEmpty()) {
-                                    int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
-                                    if (iconResId != 0) {
-                                        categoryIcon.setImageResource(iconResId);
+                        if (isAdded() && getContext() != null) {  // Check again within the callback to prevent updating the UI if fragment is detached
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String categoryName = document.getString("expenseCategoryName");
+                                    String iconName = document.getString("categoryExpenseImage");
+                                    expenseType.setText(categoryName != null ? categoryName : "Unknown Category");
+                                    if (iconName != null && !iconName.isEmpty()) {
+                                        int iconResId = getResources().getIdentifier(iconName, "drawable", requireActivity().getPackageName());
+                                        if (iconResId != 0) {
+                                            categoryIcon.setImageResource(iconResId);
+                                        } else {
+                                            categoryIcon.setImageResource(R.drawable.ic_default);
+                                        }
                                     } else {
                                         categoryIcon.setImageResource(R.drawable.ic_default);
                                     }
+                                    expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
                                 } else {
-                                    categoryIcon.setImageResource(R.drawable.ic_default);
+                                    Log.d("getExpenseCategory", "No such category found!");
+                                    setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
                                 }
-                                expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
                             } else {
-                                Log.d("getExpenseCategory", "No such category found!");
+                                Log.d("getExpenseCategory", "Error getting category", task.getException());
                                 setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
                             }
-                        } else {
-                            Log.d("getExpenseCategory", "Error getting category", task.getException());
-                            setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
                         }
                     });
         }

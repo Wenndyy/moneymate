@@ -9,11 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.moneymate"
-        minSdk 26
+        minSdk 23
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,16 +23,21 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     packagingOptions {
-        pickFirst 'com/itextpdf/io/font/*'
-        pickFirst 'com/itextpdf/io/font/cmap/*'
+        jniLibs {
+            pickFirsts += ['com/itextpdf/io/font/*', 'com/itextpdf/io/font/cmap/*']
+        }
+        resources {
+            pickFirsts += ['com/itextpdf/io/font/*', 'com/itextpdf/io/font/cmap/*']
+        }
     }
     buildFeatures {
         viewBinding true
     }
+
 
 }
 
@@ -54,4 +58,14 @@ dependencies {
     implementation libs.firebase.bom
     implementation 'androidx.core:core:1.15.0'
     implementation 'com.github.Spikeysanju:MotionToast:1.4'
+
+    implementation 'com.google.android.gms:play-services-base:18.5.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'com.google.firebase:firebase-auth:23.1.0'
+    testImplementation 'com.google.firebase:firebase-firestore:25.1.1'
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+
 }
