@@ -171,7 +171,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
                             }
 
 
-                            expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
+                            expenseAmount.setText("-"+formatRupiah(expense.getAmount()));
                         } else {
                             Log.d("getIncomeCategory", "No such category found!");
                             expenseType.setText("Unknown Category");
@@ -260,8 +260,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        formatRupiah.setMaximumFractionDigits(0);
-        formatRupiah.setMinimumFractionDigits(0);
+
         return formatRupiah.format(amount);
     }
 

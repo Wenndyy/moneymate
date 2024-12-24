@@ -300,7 +300,7 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
                                 categoryIcon.setImageResource(R.drawable.ic_default);
                             }
 
-                            expenseAmount.setText(formatRupiah(expense.getAmount()));
+                            expenseAmount.setText("-"+formatRupiah(expense.getAmount()));
                         } else {
                             expenseType.setText("Unknown Category");
                             categoryIcon.setImageResource(R.drawable.ic_default);
@@ -316,8 +316,7 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        formatRupiah.setMaximumFractionDigits(0);
-        formatRupiah.setMinimumFractionDigits(0);
+
         return formatRupiah.format(amount);
     }
 

@@ -136,8 +136,6 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
     private String formatCurrency(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        formatRupiah.setMaximumFractionDigits(0);
-        formatRupiah.setMinimumFractionDigits(0);
         return formatRupiah.format(amount);
     }
 
@@ -261,7 +259,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
             dateLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_item_record));
             dateLayout.addView(dateView);
             for (ItemGoals goals : itemGoals) {
-                View expenseView = inflater.inflate(R.layout.record_expense_item, null);
+                View expenseView = inflater.inflate(R.layout.record_income_item, null);
                 TextView expenseType = expenseView.findViewById(R.id.incomeType);
                 TextView expenseAmount = expenseView.findViewById(R.id.incomeAmount);
                 ImageView categoryIcon = expenseView.findViewById(R.id.categoryIcon);
@@ -315,7 +313,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
                                 categoryIcon.setImageResource(R.drawable.ic_default);
                             }
 
-                            expenseAmount.setText(formatRupiah(itemGoals.getAmount()));
+                            expenseAmount.setText("+"+formatRupiah(itemGoals.getAmount()));
                         } else {
                             expenseType.setText("Unknown Category");
                             categoryIcon.setImageResource(R.drawable.ic_default);

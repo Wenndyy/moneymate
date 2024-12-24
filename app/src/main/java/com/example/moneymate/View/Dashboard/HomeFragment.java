@@ -138,14 +138,14 @@ public class HomeFragment extends Fragment implements DashboardListener {
             if (data.containsKey("totalIncome")) {
                 double totalIncome = (double) data.get("totalIncome");
                 TextView incomeTotalTextView = getView().findViewById(R.id.totalIncome);
-                incomeTotalTextView.setText("+ " + formatRupiah(totalIncome));
+                incomeTotalTextView.setText("+" + formatRupiah(totalIncome));
             } else if (data.containsKey("fullname")) {
                 String name = (String) data.get("fullname");
                 tvUsername.setText(name);
             } else if (data.containsKey("totalExpense")) {
                 double totalExpense = (double) data.get("totalExpense");
                 TextView expenseTotalTextView = getView().findViewById(R.id.totalExpense);
-                expenseTotalTextView.setText("- " + formatRupiah(totalExpense));
+                expenseTotalTextView.setText("-" + formatRupiah(totalExpense));
             }
         }
     }
@@ -165,8 +165,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
     public String formatRupiah(double amount) {
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        formatRupiah.setMaximumFractionDigits(0);
-        formatRupiah.setMinimumFractionDigits(0);
+
         return formatRupiah.format(amount);
     }
 
@@ -276,7 +275,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
     }
     private void setDefaultCategory(TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
         incomeType.setText("Unknown Category");
-        incomeAmount.setText("+ "+formatRupiah(income.getAmount()));
+        incomeAmount.setText("+"+formatRupiah(income.getAmount()));
         categoryIcon.setImageResource(R.drawable.ic_default);
     }
     private void getIncomeCategory(String categoryId, TextView incomeType, TextView incomeAmount, ImageView categoryIcon, Income income) {
@@ -302,7 +301,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
                                     } else {
                                         categoryIcon.setImageResource(R.drawable.ic_default); // Default icon
                                     }
-                                    incomeAmount.setText("+ " + formatRupiah(income.getAmount()));
+                                    incomeAmount.setText("+" + formatRupiah(income.getAmount()));
                                 } else {
                                     Log.d("getIncomeCategory", "No such category found!");
                                     setDefaultCategory(incomeType, incomeAmount, categoryIcon, income);
@@ -398,7 +397,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
                                     } else {
                                         categoryIcon.setImageResource(R.drawable.ic_default);
                                     }
-                                    expenseAmount.setText("- "+formatRupiah(expense.getAmount()));
+                                    expenseAmount.setText("-"+formatRupiah(expense.getAmount()));
                                 } else {
                                     Log.d("getExpenseCategory", "No such category found!");
                                     setDefaultCategoryExpense(expenseType, expenseAmount, categoryIcon, expense);
@@ -464,7 +463,7 @@ public class HomeFragment extends Fragment implements DashboardListener {
     }
     private void setDefaultCategoryExpense(TextView expenseType, TextView expenseAmount, ImageView categoryIcon, Expense expense) {
         expenseType.setText("Unknown Category");
-        expenseAmount.setText("- "+ formatRupiah(expense.getAmount()));
+        expenseAmount.setText("-"+ formatRupiah(expense.getAmount()));
         categoryIcon.setImageResource(R.drawable.ic_default);
     }
 

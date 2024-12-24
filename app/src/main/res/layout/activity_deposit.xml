@@ -135,7 +135,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="30dp"
-                            android:text="Goal amount"
+                            android:text="Amount"
                             android:textSize="14dp"
                             android:fontFamily="@font/poppins_medium"
                             android:textColor="@color/black"/>
