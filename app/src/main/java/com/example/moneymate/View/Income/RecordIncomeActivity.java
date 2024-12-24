@@ -63,7 +63,7 @@ public class RecordIncomeActivity extends AppCompatActivity implements RecordInc
         progressBar = findViewById(R.id.progressBar);
         backArrow = findViewById(R.id.backArrow);
         backArrow.setOnClickListener(v -> {
-           onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
 
         });
 

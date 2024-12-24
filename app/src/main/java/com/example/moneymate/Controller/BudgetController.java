@@ -343,7 +343,8 @@ public class BudgetController extends Budget{
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            List<String> itemBudget = (List<String>) document.get("itemBudget");
+
+                            ArrayList<String> itemBudget = (ArrayList<String>) document.get("itemBudget");
                             if (itemBudget != null && !itemBudget.isEmpty()) {
                                 loadExpensesFromIds(itemBudget);
                             }

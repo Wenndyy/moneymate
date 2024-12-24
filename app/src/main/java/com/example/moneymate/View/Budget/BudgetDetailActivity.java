@@ -90,7 +90,7 @@ public class BudgetDetailActivity extends AppCompatActivity implements BudgetDet
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 

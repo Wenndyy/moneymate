@@ -60,7 +60,7 @@ public class SetGoalsActivity extends AppCompatActivity implements SetGoalsListe
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
         setGoalsButton = findViewById(R.id.setGoals);

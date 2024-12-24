@@ -60,7 +60,7 @@ public class CategoryExpenseActivity extends AppCompatActivity implements Catego
             public void onClick(View v) {
                 expenseCategory = "";
                 resetCategories();
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 

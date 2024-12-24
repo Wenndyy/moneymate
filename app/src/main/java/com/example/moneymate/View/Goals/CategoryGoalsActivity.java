@@ -65,7 +65,7 @@ public class CategoryGoalsActivity extends AppCompatActivity implements Category
             @Override
             public void onClick(View v) {
                 goalsCategory = "";
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 

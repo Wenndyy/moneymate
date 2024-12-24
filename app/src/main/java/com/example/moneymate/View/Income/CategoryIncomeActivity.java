@@ -62,7 +62,7 @@ public class CategoryIncomeActivity extends AppCompatActivity implements Categor
             public void onClick(View v) {
                 incomeCategory = "";
                 resetCategories();
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
         layoutCategory = findViewById(R.id.layoutCategory);

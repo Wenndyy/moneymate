@@ -60,7 +60,7 @@ public class SetBudgetActivity extends AppCompatActivity  implements SetBudgetLi
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
         setBudgetButton = findViewById(R.id.setBudget);

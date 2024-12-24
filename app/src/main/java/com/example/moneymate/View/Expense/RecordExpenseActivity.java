@@ -70,7 +70,7 @@ public class RecordExpenseActivity extends AppCompatActivity implements RecordEx
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
         recordLayout = findViewById(R.id.recordLayout);

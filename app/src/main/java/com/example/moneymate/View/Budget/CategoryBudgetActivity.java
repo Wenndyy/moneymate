@@ -67,8 +67,7 @@ public class CategoryBudgetActivity extends AppCompatActivity implements Categor
             @Override
             public void onClick(View v) {
                 budgetCategory = "";
-
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
 

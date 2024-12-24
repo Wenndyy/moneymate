@@ -87,7 +87,7 @@ public class GoalsDetailActivity extends AppCompatActivity implements GoalsDetai
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {

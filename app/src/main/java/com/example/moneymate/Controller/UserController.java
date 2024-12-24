@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserController extends User {
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    protected FirebaseAuth mAuth;
+    protected FirebaseFirestore db;
     private MessageListener messageListener;
     private ProfileListener profileListener;
     public UserController(String idUser, String email, String fullname, String noTelepon, Date created_at, Date updated_at) {

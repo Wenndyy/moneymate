@@ -38,7 +38,16 @@ android {
         viewBinding true
     }
 
-
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    allprojects {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
 }
 
 dependencies {
@@ -53,6 +62,7 @@ dependencies {
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
     testImplementation libs.junit
+    testImplementation libs.core
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     implementation libs.firebase.bom
@@ -66,6 +76,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'com.google.firebase:firebase-auth:23.1.0'
     testImplementation 'com.google.firebase:firebase-firestore:25.1.1'
-    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+
 
 }
